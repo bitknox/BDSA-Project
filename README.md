@@ -7,7 +7,7 @@
 - Fredag 12-14
 ### Weekly:
 - Tirsdag 14-16
-###Both:
+### Both:
 - Fredag 8-10
 - Mandag 11-14
 
