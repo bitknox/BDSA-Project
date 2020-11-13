@@ -1,0 +1,9 @@
+C:\Users\Johan\Desktop\BDSA-Project\QueueSafe.Entities\bin\Debug\netstandard2.0\QueueSafe.Entities.deps.json
+C:\Users\Johan\Desktop\BDSA-Project\QueueSafe.Entities\bin\Debug\netstandard2.0\QueueSafe.Entities.dll
+C:\Users\Johan\Desktop\BDSA-Project\QueueSafe.Entities\bin\Debug\netstandard2.0\QueueSafe.Entities.pdb
+C:\Users\Johan\Desktop\BDSA-Project\QueueSafe.Entities\obj\Debug\netstandard2.0\QueueSafe.Entities.csprojAssemblyReference.cache
+C:\Users\Johan\Desktop\BDSA-Project\QueueSafe.Entities\obj\Debug\netstandard2.0\QueueSafe.Entities.AssemblyInfoInputs.cache
+C:\Users\Johan\Desktop\BDSA-Project\QueueSafe.Entities\obj\Debug\netstandard2.0\QueueSafe.Entities.AssemblyInfo.cs
+C:\Users\Johan\Desktop\BDSA-Project\QueueSafe.Entities\obj\Debug\netstandard2.0\QueueSafe.Entities.csproj.CoreCompileInputs.cache
+C:\Users\Johan\Desktop\BDSA-Project\QueueSafe.Entities\obj\Debug\netstandard2.0\QueueSafe.Entities.dll
+C:\Users\Johan\Desktop\BDSA-Project\QueueSafe.Entities\obj\Debug\netstandard2.0\QueueSafe.Entities.pdb
