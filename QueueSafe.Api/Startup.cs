@@ -27,13 +27,9 @@ namespace QueueSafe.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var connectionString = Configuration.GetConnectionString("ConnectionString");
-            using var connection = new SqlConnection(connectionString);
-            var builder = new DbContextOptionsBuilder<BookingContext>();
-            builder.UseSqlServer(connectionString);
-            using var context = new BookingContext(builder.Options);
-
-            connection.Open();
+            services.AddDbContext<BookingContext>(options =>
+               options.UseSqlServer(Configuration.GetConnectionString("ConnectionString"),
+               b => b.MigrationsAssembly("QueueSafe.Api")));
             services.AddDbContext<BookingContext>();
             services.AddScoped<IBookingContext, BookingContext>();
 
