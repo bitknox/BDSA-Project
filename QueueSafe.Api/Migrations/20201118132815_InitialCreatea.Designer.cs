@@ -10,7 +10,7 @@ using QueueSafe.Entities;
 namespace QueueSafe.Api.Migrations
 {
     [DbContext(typeof(BookingContext))]
-    [Migration("20201118103937_InitialCreatea")]
+    [Migration("20201118132815_InitialCreatea")]
     partial class InitialCreatea
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,6 +26,9 @@ namespace QueueSafe.Api.Migrations
                     b.Property<string>("Token")
                         .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)");
+
+                    b.Property<int>("State")
+                        .HasColumnType("int");
 
                     b.Property<int>("StoreId")
                         .HasColumnType("int");
@@ -43,14 +46,16 @@ namespace QueueSafe.Api.Migrations
                         new
                         {
                             Token = "hbkHBAKBKHSDS/",
+                            State = 0,
                             StoreId = 1,
-                            TimeStamp = new DateTime(2020, 11, 18, 11, 39, 37, 129, DateTimeKind.Local).AddTicks(8882)
+                            TimeStamp = new DateTime(2020, 11, 18, 14, 28, 15, 504, DateTimeKind.Local).AddTicks(9227)
                         },
                         new
                         {
                             Token = "hbkHBasdAKBKHSDS/",
+                            State = 0,
                             StoreId = 1,
-                            TimeStamp = new DateTime(2020, 11, 18, 11, 39, 37, 133, DateTimeKind.Local).AddTicks(7047)
+                            TimeStamp = new DateTime(2020, 11, 18, 14, 28, 15, 508, DateTimeKind.Local).AddTicks(1361)
                         });
                 });
 

@@ -15,7 +15,7 @@ namespace QueueSafe.Shared
         public DateTime TimeStamp {
             get => _TimeStamp;
             set => _TimeStamp = DateTime.Now;
-        }
+        }        
         
         [Required]
         [StringLength(128)]

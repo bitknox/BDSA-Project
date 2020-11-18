@@ -2,6 +2,6 @@ namespace QueueSafe.Shared
 {
     public class BookingUpdateDTO : BookingCreateDTO
     {
-        // update state
+        public BookingState State { get; set; }
     }
 }

@@ -27,7 +27,8 @@ namespace QueueSafe.Api.Migrations
                 {
                     Token = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
                     StoreId = table.Column<int>(type: "int", nullable: false),
-                    TimeStamp = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    TimeStamp = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    State = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -47,13 +48,13 @@ namespace QueueSafe.Api.Migrations
 
             migrationBuilder.InsertData(
                 table: "Booking",
-                columns: new[] { "Token", "StoreId", "TimeStamp" },
-                values: new object[] { "hbkHBAKBKHSDS/", 1, new DateTime(2020, 11, 18, 11, 39, 37, 129, DateTimeKind.Local).AddTicks(8882) });
+                columns: new[] { "Token", "State", "StoreId", "TimeStamp" },
+                values: new object[] { "hbkHBAKBKHSDS/", 0, 1, new DateTime(2020, 11, 18, 14, 28, 15, 504, DateTimeKind.Local).AddTicks(9227) });
 
             migrationBuilder.InsertData(
                 table: "Booking",
-                columns: new[] { "Token", "StoreId", "TimeStamp" },
-                values: new object[] { "hbkHBasdAKBKHSDS/", 1, new DateTime(2020, 11, 18, 11, 39, 37, 133, DateTimeKind.Local).AddTicks(7047) });
+                columns: new[] { "Token", "State", "StoreId", "TimeStamp" },
+                values: new object[] { "hbkHBasdAKBKHSDS/", 0, 1, new DateTime(2020, 11, 18, 14, 28, 15, 508, DateTimeKind.Local).AddTicks(1361) });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Booking_StoreId",

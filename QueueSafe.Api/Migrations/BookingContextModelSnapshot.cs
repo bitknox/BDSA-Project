@@ -25,6 +25,9 @@ namespace QueueSafe.Api.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)");
 
+                    b.Property<int>("State")
+                        .HasColumnType("int");
+
                     b.Property<int>("StoreId")
                         .HasColumnType("int");
 
@@ -41,14 +44,16 @@ namespace QueueSafe.Api.Migrations
                         new
                         {
                             Token = "hbkHBAKBKHSDS/",
+                            State = 0,
                             StoreId = 1,
-                            TimeStamp = new DateTime(2020, 11, 18, 11, 39, 37, 129, DateTimeKind.Local).AddTicks(8882)
+                            TimeStamp = new DateTime(2020, 11, 18, 14, 28, 15, 504, DateTimeKind.Local).AddTicks(9227)
                         },
                         new
                         {
                             Token = "hbkHBasdAKBKHSDS/",
+                            State = 0,
                             StoreId = 1,
-                            TimeStamp = new DateTime(2020, 11, 18, 11, 39, 37, 133, DateTimeKind.Local).AddTicks(7047)
+                            TimeStamp = new DateTime(2020, 11, 18, 14, 28, 15, 508, DateTimeKind.Local).AddTicks(1361)
                         });
                 });
 

@@ -9,9 +9,11 @@ namespace QueueSafe.Entities
         public virtual Store Store { get; set; }
 
         public int StoreId { get; set; }
-    
+        
         [Required]
         public DateTime TimeStamp { get; set; }
+        
+        public BookingState State { get; set; }
         
         [Required]
         [StringLength(128)]
