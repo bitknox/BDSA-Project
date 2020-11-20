@@ -16,5 +16,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\QueueSafe.Entities\QueueSafe.Entities.csproj" />
+    <ProjectReference Include="..\QueueSafe.Models\QueueSafe.Models.csproj" />
   </ItemGroup>
 </Project>

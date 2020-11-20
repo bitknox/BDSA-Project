@@ -1,14 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\QueueSafe.Api\QueueSafe.Api.csproj" />
     <ProjectReference Include="..\QueueSafe.Entities\QueueSafe.Entities.csproj" />
     <ProjectReference Include="..\QueueSafe.Shared\QueueSafe.Shared.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
 </Project>

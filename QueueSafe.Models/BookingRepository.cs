@@ -1,11 +1,15 @@
+using System;
+using System.Security.Cryptography.X509Certificates;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using QueueSafe.Entities;
 using QueueSafe.Shared;
+using State = QueueSafe.Entities.BookingState;
 
 namespace QueueSafe.Models 
-{   //TODO: Implement methods :)
+{ 
     public class BookingRepository : IBookingRepository
     {
         private readonly IBookingContext _context;
@@ -15,18 +19,26 @@ namespace QueueSafe.Models
             _context = context;
         }
 
-        public Task<int> Create(BookingCreateDTO booking)
+        public async Task<int> Create(BookingCreateDTO booking)
         {
-            throw new System.NotImplementedException();
-            // Default BookingState :D
+            var entity = new Booking
+            {
+                Store = await GetStore(booking.StoreName),
+                Token = booking.Token,
+                TimeStamp = booking.TimeStamp,
+                State = State.Pending
+            };
+
+            _context.Booking.Add(entity);
+            return await _context.SaveChangesAsync();
         }
 
-        public Task<HttpStatusCode> Delete(string token)
+        public async Task<HttpStatusCode> Delete(string token)
         {
             throw new System.NotImplementedException();
         }
 
-        public Task<BookingDetailsDTO> Read(string token)
+        public async Task<BookingDetailsDTO> Read(string token)
         {
             throw new System.NotImplementedException();
         }
@@ -41,9 +53,11 @@ namespace QueueSafe.Models
             throw new System.NotImplementedException();
         }
 
-        public Task<HttpStatusCode> Update(BookingUpdateDTO booking)
+        public async Task<HttpStatusCode> Update(BookingUpdateDTO booking)
         {
             throw new System.NotImplementedException();
         }
+
+        private async Task<Store> GetStore(string name) => await _context.Store.FirstOrDefaultAsync(s => s.Name == name) ?? new Store { Name = name };
     }
 }

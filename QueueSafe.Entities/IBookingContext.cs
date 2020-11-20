@@ -8,6 +8,7 @@ namespace QueueSafe.Entities
     public interface IBookingContext
     {
         DbSet<Booking> Booking { get; }
+        DbSet<Store> Store { get; set; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }
