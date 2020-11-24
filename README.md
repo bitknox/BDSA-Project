@@ -1,5 +1,5 @@
 # BDSA Project
-
+![.NET Core](https://github.com/bitknox/BDSA-Project/workflows/.NET%20Core/badge.svg)
 ## Meeting times
 
 ### Project: 
