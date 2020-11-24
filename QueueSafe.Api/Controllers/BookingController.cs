@@ -27,7 +27,6 @@ namespace QueueSafe.Api.Controllers
         [ProducesResponseType(Status404NotFound)]
         public async Task<ActionResult<BookingDetailsDTO>> Get(string token)
         {
-
             var booking = await _repository.Read(token);
 
             if (booking == null) return NotFound();
