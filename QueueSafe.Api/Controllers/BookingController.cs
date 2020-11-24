@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using QueueSafe.Models;
 using QueueSafe.Shared;
+using Microsoft.EntityFrameworkCore;
 using static Microsoft.AspNetCore.Http.StatusCodes;
 
 namespace QueueSafe.Api.Controllers
@@ -32,6 +33,13 @@ namespace QueueSafe.Api.Controllers
             if (booking == null) return NotFound();
 
             return booking;
+        }
+
+        [HttpGet("all")]
+        [ProducesResponseType(Status200OK)]
+        public ActionResult<IEnumerable<BookingListDTO>> Get()
+        {
+            return _repository.ReadAllBookings().ToList();
         }
     }
 }

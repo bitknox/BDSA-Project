@@ -63,7 +63,7 @@ namespace QueueSafe.Models
             return await entity.FirstOrDefaultAsync();
         }
 
-        public async Task<ICollection<BookingListDTO>> ReadAllBookings()
+        public IQueryable<BookingListDTO> ReadAllBookings()
         {
             var bookings = from h in _context.Booking
                            select new BookingListDTO
@@ -73,10 +73,10 @@ namespace QueueSafe.Models
                                Token = h.Token
                            };
 
-            return await bookings.ToListAsync();
+            return bookings;
         }
 
-        public async Task<ICollection<BookingListDTO>> ReadStoreBookings(int StoreId)
+        public IQueryable<BookingListDTO> ReadStoreBookings(int StoreId)
         {
             var bookings = from h in _context.Booking
                            where h.StoreId == StoreId
@@ -87,7 +87,7 @@ namespace QueueSafe.Models
                                Token = h.Token
                            };
 
-            return await bookings.ToListAsync();
+            return bookings;
         }
 
         public async Task<HttpStatusCode> Update(BookingUpdateDTO booking)

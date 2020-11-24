@@ -118,20 +118,22 @@ namespace QueueSafe.Models.Test
         public async Task Read_returns_list_of_5()
         {
             // Act
-            var entity = await _repository.ReadAllBookings();
+            var entity = _repository.ReadAllBookings();
+            var entityList = await entity.ToListAsync();
 
             // Assert
-            Assert.Equal(5, entity.Count);
+            Assert.Equal(5, entityList.Count);
         }
 
         [Fact]
         public async Task Read_for_Elminidik_returns_list_of_3()
         {
             // Arrange
-            var entity = await _repository.ReadStoreBookings(2);
+            var entity = _repository.ReadStoreBookings(2);
+            var entityList = await entity.ToListAsync();
 
             // Act
-            var actual = entity.Count;
+            var actual = entityList.Count;
             var expected = 3;
 
             // Assert

@@ -1,3 +1,4 @@
+using System.Linq;
 using System;
 using Xunit;
 using Moq;
@@ -13,12 +14,13 @@ namespace QueueSafe.Api.Test
     {
         private readonly BookingController _controller;
 
+
         public BookingControllerTest()
         {
             var mockBookingRepository = new Mock<IBookingRepository>();
             mockBookingRepository.Setup(m => m.Read("sometoken")).ReturnsAsync(new BookingDetailsDTO());
+            mockBookingRepository.Setup(m => m.ReadAllBookings()).Returns(new List<BookingListDTO>().AsQueryable());
             _controller = new BookingController(mockBookingRepository.Object);
-
         }
 
         [Fact]
@@ -39,6 +41,16 @@ namespace QueueSafe.Api.Test
 
             // Assert
             Assert.IsType<NotFoundResult>(actual.Result);
+        }
+
+        [Fact]
+        public void Get_all_bookings_returns_booking_list()
+        {
+            // Act
+            var actual = _controller.Get();
+
+            // Assert
+            Assert.IsType<List<BookingListDTO>>(actual.Value);
         }
     }
 }
