@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using System.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using QueueSafe.Entities;
+using QueueSafe.Models;
 
 namespace QueueSafe.Api
 {
@@ -32,6 +33,7 @@ namespace QueueSafe.Api
                b => b.MigrationsAssembly("QueueSafe.Api")));
             services.AddDbContext<BookingContext>();
             services.AddScoped<IBookingContext, BookingContext>();
+            services.AddScoped<IBookingRepository, BookingRepository>();
 
             services.AddControllers();
         }

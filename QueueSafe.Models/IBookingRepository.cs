@@ -11,8 +11,8 @@ namespace QueueSafe.Models
     {
         Task<int> Create(BookingCreateDTO booking);
         Task<BookingDetailsDTO> Read(string token);
-        IQueryable<BookingListDTO> ReadAllBookings();
-        IQueryable<BookingListDTO> ReadStoreBookings(int StoreId);
+        Task<ICollection<BookingListDTO>> ReadAllBookings();
+        Task<ICollection<BookingListDTO>> ReadStoreBookings(int StoreId);
         Task<HttpStatusCode> Update(BookingUpdateDTO booking);
         Task<HttpStatusCode> Delete(string token);
     }

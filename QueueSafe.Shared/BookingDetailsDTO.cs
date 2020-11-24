@@ -9,5 +9,7 @@ namespace QueueSafe.Shared
         public string StoreName { get; set; }
     
         public DateTime TimeStamp { get; set; }
+
+        public BookingState State { get; set; }
     }
 }

@@ -29,7 +29,7 @@ namespace QueueSafe.Entities
                     .HasMany(c => c.Bookings)
                     .WithOne(c => c.Store);
 
-
+            /*
             var Store = new Store
             {
                 Id = 1,
@@ -46,10 +46,7 @@ namespace QueueSafe.Entities
             };
 
             modelBuilder.Entity<Booking>().HasData(Bookings);
-
-
-
-
+            */
         }
     }
 }
