@@ -1,3 +1,4 @@
+using System.Net;
 using System.Linq;
 using System;
 using Xunit;
@@ -20,6 +21,8 @@ namespace QueueSafe.Api.Test
             var mockBookingRepository = new Mock<IBookingRepository>();
             mockBookingRepository.Setup(m => m.Read("sometoken")).ReturnsAsync(new BookingDetailsDTO());
             mockBookingRepository.Setup(m => m.ReadAllBookings()).Returns(new List<BookingListDTO>().AsQueryable());
+            mockBookingRepository.Setup(m => m.Delete("wrongtoken")).ReturnsAsync(HttpStatusCode.NotFound);
+            mockBookingRepository.Setup(m => m.Delete("righttoken")).ReturnsAsync(HttpStatusCode.OK);
             _controller = new BookingController(mockBookingRepository.Object);
         }
 
