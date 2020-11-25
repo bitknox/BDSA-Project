@@ -23,6 +23,16 @@ namespace QueueSafe.Api.Controllers
             _repository = repository;
         }
 
+        [HttpPost]
+        [ProducesResponseType(Status201Created)]
+        [ProducesResponseType(Status400BadRequest)]
+        public async Task<IActionResult> Post([FromBody] int StoreId)
+        {            
+            var result = await _repository.Create(StoreId);
+
+            return CreatedAtAction(nameof(Get), new { result.token }, default);
+        }
+
         [HttpGet("{token}")]
         [ProducesResponseType(Status200OK)]
         [ProducesResponseType(Status404NotFound)]
@@ -34,12 +44,40 @@ namespace QueueSafe.Api.Controllers
 
             return booking;
         }
-
+    
         [HttpGet("all")]
         [ProducesResponseType(Status200OK)]
         public ActionResult<IEnumerable<BookingListDTO>> Get()
         {
             return _repository.ReadAllBookings().ToList();
+        }
+
+        [HttpPut("{token}")]
+        [ProducesResponseType(Status200OK)]
+        [ProducesResponseType(Status404NotFound)]
+        public async Task<ActionResult> Put(string token, [FromBody] BookingUpdateDTO booking)        
+        {
+            // Ensures you dont update wrong object
+            if (token != booking.Token)
+            {
+                ModelState.AddModelError("token", "token in URL must match token in body");
+
+                return BadRequest(ModelState);
+            }
+            
+            var response = await _repository.Update(booking);
+
+            return new StatusCodeResult((int)response);
+        }
+
+        [HttpDelete("{token}")]
+        [ProducesResponseType(Status200OK)]
+        [ProducesResponseType(Status404NotFound)]
+        public async Task<ActionResult> Delete(string token)
+        {
+            var response = await _repository.Delete(token);
+
+            return new StatusCodeResult((int)response);
         }
     }
 }

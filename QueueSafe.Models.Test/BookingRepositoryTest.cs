@@ -31,36 +31,22 @@ namespace QueueSafe.Models.Test
 
         [Fact]
         public async Task Create_booking_successful_adds_two_entities_to_db_from_nonexisting_store()
-        {
-            // Arrange
-            var booking = new BookingCreateDTO
-            {
-                StoreName = "GandalfsButtHash",
-                Token = "dikkerman"
-            };
-
+        {   
             // Act
-            var result = await _repository.Create(booking);
+            var result = await _repository.Create(236666663);
 
             // Assert
-            Assert.Equal(2, result);
+            Assert.Equal(2, result.affectedRows);
         }
 
         [Fact]
         public async Task Create_booking_successful_adds_one_entitie_to_db_from_existing_store()
         {
-            // Arrange
-            var booking = new BookingCreateDTO
-            {
-                StoreName = "GandalfsButtHashing",
-                Token = "shat"
-            };
-
             // Act
-            var result = await _repository.Create(booking);
+            var result = await _repository.Create(2);
 
             // Assert
-            Assert.Equal(1, result);
+            Assert.Equal(1, result.affectedRows);
         }
 
         [Fact]

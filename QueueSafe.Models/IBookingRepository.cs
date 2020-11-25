@@ -9,7 +9,7 @@ namespace QueueSafe.Models
 {
     public interface IBookingRepository
     {
-        Task<int> Create(BookingCreateDTO booking);
+        Task<(int affectedRows, string token)> Create(int StoreId);
         Task<BookingDetailsDTO> Read(string token);
         IQueryable<BookingListDTO> ReadAllBookings();
         IQueryable<BookingListDTO> ReadStoreBookings(int StoreId);

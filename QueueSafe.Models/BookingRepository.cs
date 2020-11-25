@@ -21,23 +21,24 @@ namespace QueueSafe.Models
             _context = context;
         }
 
-        public async Task<int> Create(BookingCreateDTO booking)
+        public async Task<(int affectedRows, string token)> Create(int StoreId)
         {
             var entity = new Booking
             {
-                Store = await GetStore(booking.StoreName),
-                Token = booking.Token,
-                TimeStamp = booking.TimeStamp,
+                Store = await GetStore(StoreId),
+                Token = Guid.NewGuid().ToString(),
+                TimeStamp = DateTime.Now,
                 State = State.Pending
             };
 
             _context.Booking.Add(entity);
-            return await _context.SaveChangesAsync();
+            var affectedRows = await _context.SaveChangesAsync();
+            return (affectedRows, entity.Token);
         }
 
-        public async Task<HttpStatusCode> Delete(string token)
+        public async Task<HttpStatusCode> Delete(string Token)
         {
-            var entity = await _context.Booking.FindAsync(token);
+            var entity = await _context.Booking.FindAsync(Token);
 
             if (entity != null)
             {
@@ -49,10 +50,10 @@ namespace QueueSafe.Models
             return NotFound;
         }
 
-        public async Task<BookingDetailsDTO> Read(string token)
+        public async Task<BookingDetailsDTO> Read(string Token)
         {
             var entity = from h in _context.Booking
-                         where h.Token == token
+                         where h.Token == Token
                          select new BookingDetailsDTO
                          {
                              StoreId = h.StoreId,
@@ -90,19 +91,19 @@ namespace QueueSafe.Models
             return bookings;
         }
 
-        public async Task<HttpStatusCode> Update(BookingUpdateDTO booking)
+        public async Task<HttpStatusCode> Update(BookingUpdateDTO Booking)
         {
-            var entity = await _context.Booking.FindAsync(booking.Token);
+            var entity = await _context.Booking.FindAsync(Booking.Token);
 
             if (entity == null) return NotFound;
 
-            entity.State = (QueueSafe.Entities.BookingState)booking.State;
+            entity.State = (QueueSafe.Entities.BookingState)Booking.State;
 
             await _context.SaveChangesAsync();
 
             return OK;
         }
 
-        private async Task<Store> GetStore(string name) => await _context.Store.FirstOrDefaultAsync(s => s.Name == name) ?? new Store { Name = name };
+        private async Task<Store> GetStore(int StoreId) => await _context.Store.FirstOrDefaultAsync(s => s.Id == StoreId) ?? new Store { Id = StoreId, Name = "NewStore" };
     }
 }
