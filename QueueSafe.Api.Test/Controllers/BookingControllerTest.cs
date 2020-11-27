@@ -14,15 +14,17 @@ namespace QueueSafe.Api.Test
     public class BookingControllerTest
     {
         private readonly BookingController _controller;
-
+        private readonly Mock<IBookingRepository> mockBookingRepository;
 
         public BookingControllerTest()
         {
-            var mockBookingRepository = new Mock<IBookingRepository>();
+            mockBookingRepository = new Mock<IBookingRepository>();
             mockBookingRepository.Setup(m => m.Read("sometoken")).ReturnsAsync(new BookingDetailsDTO());
             mockBookingRepository.Setup(m => m.ReadAllBookings()).Returns(new List<BookingListDTO>().AsQueryable());
             mockBookingRepository.Setup(m => m.Delete("wrongtoken")).ReturnsAsync(HttpStatusCode.NotFound);
             mockBookingRepository.Setup(m => m.Delete("righttoken")).ReturnsAsync(HttpStatusCode.OK);
+            mockBookingRepository.Setup(m => m.Update(new BookingUpdateDTO{Token = "righttoken", State = BookingState.Expired})).ReturnsAsync(HttpStatusCode.OK);
+            mockBookingRepository.Setup(m => m.Update(new BookingUpdateDTO{Token = "wrongtoken", State = BookingState.Expired})).ReturnsAsync(HttpStatusCode.NotFound);
             _controller = new BookingController(mockBookingRepository.Object);
         }
 
@@ -55,5 +57,71 @@ namespace QueueSafe.Api.Test
             // Assert
             Assert.IsType<List<BookingListDTO>>(actual.Value);
         }
+        
+        [Fact]
+        public async void Delete_existing_booking_returns_ok()
+        {
+            //Act
+            var actual = await _controller.Delete("righttoken");
+            
+            // Assert
+            var result = Assert.IsType<StatusCodeResult>(actual);
+
+            Assert.Equal(200, result.StatusCode);   
+        }
+
+        [Fact]
+        public async void Delete_non_existing_booking_returns_not_found()
+        {
+            // Act
+            var actual = await _controller.Delete("wrongtoken");
+             
+            // Assert
+            var result = Assert.IsType<StatusCodeResult>(actual);
+
+            Assert.Equal(404, result.StatusCode);
+        }
+
+        [Fact]
+        public async void Update_non_existing_booking_returns_ok()
+        {
+            // Arrange
+            var updateBooking = new BookingUpdateDTO 
+            {
+                Token = "righttoken",
+                State = BookingState.Expired
+            };
+            mockBookingRepository.Setup(m => m.Update(updateBooking)).ReturnsAsync(HttpStatusCode.OK);
+            var controller = new BookingController(mockBookingRepository.Object);
+            
+            // Act
+            var actual = await controller.Put(updateBooking.Token, updateBooking);
+
+            // Assert
+            var result = Assert.IsType<StatusCodeResult>(actual);
+            
+            Assert.Equal(200, result.StatusCode);
+        }
+        
+        [Fact]
+        public async void Update_non_existing_booking_returns_not_found()
+        {
+            // Arrange
+            var updateBooking = new BookingUpdateDTO 
+            {
+                Token = "wrongtoken",
+                State = BookingState.Expired
+            };
+            mockBookingRepository.Setup(m => m.Update(updateBooking)).ReturnsAsync(HttpStatusCode.NotFound);
+            var controller = new BookingController(mockBookingRepository.Object);
+            
+            // Act
+            var actual = await controller.Put(updateBooking.Token, updateBooking);
+
+            // Assert
+            var result = Assert.IsType<StatusCodeResult>(actual);
+            
+            Assert.Equal(404, result.StatusCode);
+        }
     }
-}
+}    

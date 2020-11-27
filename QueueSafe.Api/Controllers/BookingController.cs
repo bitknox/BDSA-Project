@@ -77,7 +77,7 @@ namespace QueueSafe.Api.Controllers
         {
             var response = await _repository.Delete(token);
 
-            return new StatusCodeResult((int)response);
+            return new StatusCodeResult((int) response);
         }
     }
 }
