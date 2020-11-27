@@ -23,8 +23,6 @@ namespace QueueSafe.Api.Test
             mockBookingRepository.Setup(m => m.ReadAllBookings()).Returns(new List<BookingListDTO>().AsQueryable());
             mockBookingRepository.Setup(m => m.Delete("wrongtoken")).ReturnsAsync(HttpStatusCode.NotFound);
             mockBookingRepository.Setup(m => m.Delete("righttoken")).ReturnsAsync(HttpStatusCode.OK);
-            mockBookingRepository.Setup(m => m.Update(new BookingUpdateDTO{Token = "righttoken", State = BookingState.Expired})).ReturnsAsync(HttpStatusCode.OK);
-            mockBookingRepository.Setup(m => m.Update(new BookingUpdateDTO{Token = "wrongtoken", State = BookingState.Expired})).ReturnsAsync(HttpStatusCode.NotFound);
             _controller = new BookingController(mockBookingRepository.Object);
         }
 
@@ -122,6 +120,23 @@ namespace QueueSafe.Api.Test
             var result = Assert.IsType<StatusCodeResult>(actual);
             
             Assert.Equal(404, result.StatusCode);
+        }
+
+        [Fact]
+        public async void Create_booking_returns_created()
+        {
+            // Arrange
+            int StoreId = 2;
+            mockBookingRepository.Setup(m => m.Create(StoreId)).ReturnsAsync((1, "sometoken"));
+            var controller = new BookingController(mockBookingRepository.Object);
+            
+            // Act
+            var actual = await controller.Post(StoreId);
+
+             // Assert
+            var result = Assert.IsType<CreatedAtActionResult>(actual);
+            
+            Assert.Equal(201, result.StatusCode);
         }
     }
 }    

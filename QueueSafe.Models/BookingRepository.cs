@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using System;
+using System.Data;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -23,17 +24,24 @@ namespace QueueSafe.Models
 
         public async Task<(int affectedRows, string token)> Create(int StoreId)
         {
-            var entity = new Booking
+            try
             {
-                Store = await GetStore(StoreId),
-                Token = Guid.NewGuid().ToString(),
-                TimeStamp = DateTime.Now,
-                State = State.Pending
-            };
+                var entity = new Booking
+                {
+                    Store = await GetStore(StoreId),
+                    Token = Guid.NewGuid().ToString(),
+                    TimeStamp = DateTime.Now,
+                    State = State.Pending
+                };
 
-            _context.Booking.Add(entity);
-            var affectedRows = await _context.SaveChangesAsync();
-            return (affectedRows, entity.Token);
+                _context.Booking.Add(entity);
+                var affectedRows = await _context.SaveChangesAsync();
+                return (affectedRows, entity.Token);
+            }
+            catch (ArgumentException e)
+            {
+                return (0, null);
+            }
         }
 
         public async Task<HttpStatusCode> Delete(string Token)
@@ -103,7 +111,6 @@ namespace QueueSafe.Models
 
             return OK;
         }
-
-        private async Task<Store> GetStore(int StoreId) => await _context.Store.FirstOrDefaultAsync(s => s.Id == StoreId) ?? new Store { Id = StoreId, Name = "NewStore" };
+        private async Task<Store> GetStore(int StoreId) => await _context.Store.FirstOrDefaultAsync(s => s.Id == StoreId) ?? throw new ArgumentException($"Unknown StoreId: {StoreId}");
     }
 }

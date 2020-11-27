@@ -30,13 +30,13 @@ namespace QueueSafe.Models.Test
         }
 
         [Fact]
-        public async Task Create_booking_successful_adds_two_entities_to_db_from_nonexisting_store()
+        public async Task Create_booking_successful_adds_zero_entities_to_db_from_nonexisting_store()
         {   
             // Act
             var result = await _repository.Create(236666663);
 
             // Assert
-            Assert.Equal(2, result.affectedRows);
+            Assert.Equal(0, result.affectedRows);
         }
 
         [Fact]
