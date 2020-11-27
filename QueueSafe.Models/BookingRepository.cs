@@ -15,9 +15,9 @@ namespace QueueSafe.Models
 {
     public class BookingRepository : IBookingRepository
     {
-        private readonly IBookingContext _context;
+        private readonly IQueueSafeContext _context;
 
-        public BookingRepository(IBookingContext context)
+        public BookingRepository(IQueueSafeContext context)
         {
             _context = context;
         }
@@ -38,7 +38,7 @@ namespace QueueSafe.Models
                 var affectedRows = await _context.SaveChangesAsync();
                 return (affectedRows, entity.Token);
             }
-            catch (ArgumentException e)
+            catch (ArgumentException)
             {
                 return (0, null);
             }

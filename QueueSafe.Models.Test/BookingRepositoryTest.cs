@@ -13,16 +13,16 @@ namespace QueueSafe.Models.Test
     public class BookingRepositoryTest : IDisposable
     {
         private readonly SqliteConnection _connection;
-        private readonly BookingContext _context;
+        private readonly QueueSafeContext _context;
         private readonly BookingRepository _repository;
 
         public BookingRepositoryTest()
         {
             _connection = new SqliteConnection("Filename=:memory:");
             _connection.Open();
-            var builder = new DbContextOptionsBuilder<BookingContext>().UseSqlite(_connection);
+            var builder = new DbContextOptionsBuilder<QueueSafeContext>().UseSqlite(_connection);
 
-            _context = new BookingContext(builder.Options);
+            _context = new QueueSafeContext(builder.Options);
             _context.Database.EnsureCreated();
             _context.GenerateTestData();
 

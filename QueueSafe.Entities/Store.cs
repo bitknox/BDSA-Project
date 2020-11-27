@@ -16,5 +16,7 @@ namespace QueueSafe.Entities
         public string Name { get; set; } 
 
         public virtual ICollection<Booking> Bookings { get; set; }
+
+        public Address Address { get; set; }
     }
 }

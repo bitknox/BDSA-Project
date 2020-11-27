@@ -1,4 +1,3 @@
-
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.OpenApi.Models;
@@ -23,12 +22,13 @@ namespace QueueSafe.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<BookingContext>(options =>
+            services.AddDbContext<QueueSafeContext>(options =>
                options.UseSqlServer(Configuration.GetConnectionString("ConnectionString"),
                b => b.MigrationsAssembly("QueueSafe.Api")));
-            services.AddDbContext<BookingContext>();
-            services.AddScoped<IBookingContext, BookingContext>();
+            services.AddDbContext<QueueSafeContext>();
+            services.AddScoped<IQueueSafeContext, QueueSafeContext>();
             services.AddScoped<IBookingRepository, BookingRepository>();
+            services.AddScoped<IStoreRepository, StoreRepository>();
     	    
             services.AddSwaggerGen(c =>
             {

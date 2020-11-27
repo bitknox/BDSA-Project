@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.SqlServer;
 
 namespace QueueSafe.Entities
 {
-    public class BookingContext : DbContext, IBookingContext
+    public class BookingContext : DbContext, IQueueSafeContext
     {
         public DbSet<Booking> Booking { get; set; }
         public DbSet<Store> Store { get; set; }
@@ -26,8 +26,16 @@ namespace QueueSafe.Entities
                     .HasKey(s => s.Token);
 
             modelBuilder.Entity<Store>()
+                    .HasKey(s => s.Id);
+
+            modelBuilder.Entity<Store>()
                     .HasMany(c => c.Bookings)
                     .WithOne(c => c.Store);
+
+            modelBuilder.Entity<Store>()
+                    .HasOne(a => a.Address)
+                    .WithOne(b => b.Store)
+                    .HasForeignKey<Address>(b => b.StoreId);
 
             /*
             var Store = new Store

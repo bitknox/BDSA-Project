@@ -7,7 +7,7 @@ namespace QueueSafe.Models.Test
 {
     public static class TestDataGenerator
     {
-        public static void GenerateTestData(this BookingContext context)
+        public static void GenerateTestData(this QueueSafeContext context)
         {
             var GaldalfsButtHashing = new Store
             {

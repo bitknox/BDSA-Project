@@ -8,8 +8,8 @@ using QueueSafe.Entities;
 
 namespace QueueSafe.Api.Migrations
 {
-    [DbContext(typeof(BookingContext))]
-    partial class BookingContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(QueueSafeContext))]
+    partial class QueueSafeContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
@@ -18,6 +18,28 @@ namespace QueueSafe.Api.Migrations
                 .UseIdentityColumns()
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.0");
+
+            modelBuilder.Entity("QueueSafe.Entities.Address", b =>
+                {
+                    b.Property<int>("Postal")
+                        .HasColumnType("int");
+
+                    b.Property<string>("StreetName")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("HouseNumber")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StoreId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Postal", "StreetName", "HouseNumber");
+
+                    b.HasIndex("StoreId")
+                        .IsUnique();
+
+                    b.ToTable("Address");
+                });
 
             modelBuilder.Entity("QueueSafe.Entities.Booking", b =>
                 {
@@ -39,22 +61,6 @@ namespace QueueSafe.Api.Migrations
                     b.HasIndex("StoreId");
 
                     b.ToTable("Booking");
-
-                    b.HasData(
-                        new
-                        {
-                            Token = "hbkHBAKBKHSDS/",
-                            State = 0,
-                            StoreId = 1,
-                            TimeStamp = new DateTime(2020, 11, 18, 14, 28, 15, 504, DateTimeKind.Local).AddTicks(9227)
-                        },
-                        new
-                        {
-                            Token = "hbkHBasdAKBKHSDS/",
-                            State = 0,
-                            StoreId = 1,
-                            TimeStamp = new DateTime(2020, 11, 18, 14, 28, 15, 508, DateTimeKind.Local).AddTicks(1361)
-                        });
                 });
 
             modelBuilder.Entity("QueueSafe.Entities.Store", b =>
@@ -75,14 +81,17 @@ namespace QueueSafe.Api.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Store");
+                });
 
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Capacity = 50,
-                            Name = "ElGigadik"
-                        });
+            modelBuilder.Entity("QueueSafe.Entities.Address", b =>
+                {
+                    b.HasOne("QueueSafe.Entities.Store", "Store")
+                        .WithOne("Address")
+                        .HasForeignKey("QueueSafe.Entities.Address", "StoreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Store");
                 });
 
             modelBuilder.Entity("QueueSafe.Entities.Booking", b =>
@@ -98,6 +107,8 @@ namespace QueueSafe.Api.Migrations
 
             modelBuilder.Entity("QueueSafe.Entities.Store", b =>
                 {
+                    b.Navigation("Address");
+
                     b.Navigation("Bookings");
                 });
 #pragma warning restore 612, 618
