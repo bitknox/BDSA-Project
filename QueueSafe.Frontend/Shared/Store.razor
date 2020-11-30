@@ -1,0 +1,25 @@
+
+<div class="card">
+    <img class="card-img-top" width="362px" height="200px" src=@Image alt="Card image cap">
+    <div class="card-body">
+        <h5 class="card-title">@Name</h5>
+        <p class="card-text">@Address</p>
+        <a href="#" class="btn btn-primary">Book</a>
+    </div>
+</div>
+
+
+
+
+
+@code {
+    // Demonstrates how a parent component can supply parameters
+    [Parameter]
+    public string Name { get; set; }
+
+    [Parameter]
+    public string Address { get; set; }
+
+    [Parameter]
+    public string Image { get; set; }
+}

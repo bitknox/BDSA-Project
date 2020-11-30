@@ -40,24 +40,7 @@ namespace QueueSafe.Entities
             modelBuilder.Entity<Address>()
                     .HasKey(s => new { s.Postal, s.StreetName, s.HouseNumber });
 
-            /*
-            var Store = new Store
-            {
-                Id = 1,
-                Capacity = 50,
-                Name = "ElGigadik"
-            };
 
-            modelBuilder.Entity<Store>().HasData(Store);
-
-            var Bookings = new[]
-            {
-                new Booking { StoreId = 1, TimeStamp = DateTime.Now, Token = "hbkHBAKBKHSDS/" },
-                new Booking { StoreId = 1, TimeStamp = DateTime.Now, Token = "hbkHBasdAKBKHSDS/" }
-            };
-
-            modelBuilder.Entity<Booking>().HasData(Bookings);
-            */
         }
     }
 }
