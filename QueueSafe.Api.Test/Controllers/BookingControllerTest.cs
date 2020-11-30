@@ -81,7 +81,7 @@ namespace QueueSafe.Api.Test
         }
 
         [Fact]
-        public async void Update_non_existing_booking_returns_ok()
+        public async void Update_existing_booking_returns_ok()
         {
             // Arrange
             var updateBooking = new BookingUpdateDTO 

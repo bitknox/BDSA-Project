@@ -35,10 +35,19 @@ namespace QueueSafe.Entities
             modelBuilder.Entity<Store>()
                     .HasOne(a => a.Address)
                     .WithOne(b => b.Store)
-                    .HasForeignKey<Address>(b => b.StoreId);
-            
+                    .HasForeignKey<Address>(b => b.StoreId);            
+           
+            modelBuilder.Entity<City>()
+                    .HasKey(c => c.Postal);
+
             modelBuilder.Entity<Address>()
-                    .HasKey(s => new { s.Postal, s.StreetName, s.HouseNumber });
+                    .HasOne<City>(a => a.City)
+                    .WithMany(b => b.Addresses)
+                    .HasForeignKey(a => a.CityPostal);
+     
+            modelBuilder.Entity<Address>()
+                    .HasKey(s => new { s.StreetName, s.HouseNumber, s.CityPostal });
+
 
             /*
             var Store = new Store
