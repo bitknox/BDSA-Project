@@ -30,7 +30,7 @@ namespace QueueSafe.Models.Test
         }
         
         [Fact]
-        public async Task Create_store_successful_adds_two_entity_to_db()
+        public async Task Create_store_successful_adds_three_entity_to_db()
         {
             // Arrange
             var store = new StoreCreateDTO {
@@ -43,7 +43,7 @@ namespace QueueSafe.Models.Test
             var result = await _repository.Create(store);
 
             // Assert
-            Assert.Equal(2, result.affectedRows);
+            Assert.Equal(3, result.affectedRows);
         }
 
         [Fact]

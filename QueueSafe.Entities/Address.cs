@@ -10,6 +10,8 @@ namespace QueueSafe.Entities
 
         public City City { get; set; }
 
+        public int CityPostal { get; set; }
+
         public int HouseNumber { get; set; }
 
         public override string ToString() => $"{City.Postal} {City.Name}, {StreetName} {HouseNumber}";
