@@ -84,7 +84,7 @@ namespace QueueSafe.Models.Test
             var actual = await _repository.Read(badToken);
 
             // Assert
-            Assert.Equal(null, actual);
+            Assert.Null(actual);
         }
 
         [Fact]
@@ -97,7 +97,7 @@ namespace QueueSafe.Models.Test
             var entity = await _repository.Read(goodToken);
 
             // Assert
-            Assert.Equal(entity.StoreName, "GandalfsButtHashing");
+            Assert.Equal("GandalfsButtHashing", entity.StoreName);
         }
 
         [Fact]

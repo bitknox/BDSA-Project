@@ -18,7 +18,7 @@ namespace QueueSafe.Models
             _context = context;
         }
 
-        public async Task<int> Create(StoreCreateDTO Store)
+        public async Task<(int affectedRows, int id)> Create(StoreCreateDTO Store)
         {
             var entity = new Store
             {
@@ -27,13 +27,14 @@ namespace QueueSafe.Models
                 Address = new Address
                 {
                     StreetName = Store.Address.StreetName,
-                    Postal = Store.Address.Postal,
+                    City = await GetCity(Store.Address.City),
                     HouseNumber = Store.Address.HouseNumber
                 }
             };
 
             _context.Store.Add(entity);
-            return await _context.SaveChangesAsync();
+            var affectedRows = await _context.SaveChangesAsync();
+            return (affectedRows, entity.Id);
         }
 
         public async Task<HttpStatusCode> Delete(int StoreId)
@@ -77,10 +78,10 @@ namespace QueueSafe.Models
             return stores;
         }
 
-        public IQueryable<StoreListDTO> ReadStoresCity(int Postal)
+        public IQueryable<StoreListDTO> ReadStoresCity(CityDTO City)
         {
             var stores = from h in _context.Store
-                         where h.Address.Postal == Postal
+                         where h.Address.City.Postal == City.Postal
                          select new StoreListDTO
                          {
                              Id = h.Id,
@@ -103,6 +104,14 @@ namespace QueueSafe.Models
             await _context.SaveChangesAsync();
 
             return OK;
+        }
+
+        private async Task<City> GetCity(CityDTO City)
+        {
+            var entity = await _context.Store.FirstOrDefaultAsync(s => s.Address.City.Postal == City.Postal);
+
+            if (entity == null) return new City { Name = City.Name, Postal = City.Postal };
+            else return entity.Address.City;
         }
     }
 }

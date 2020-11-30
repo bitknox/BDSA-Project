@@ -6,7 +6,7 @@ namespace QueueSafe.Shared
 
         public string StreetName { get; set; }
 
-        public int Postal { get; set; }
+        public CityDTO City { get; set; }
 
         public int HouseNumber { get; set; }
         

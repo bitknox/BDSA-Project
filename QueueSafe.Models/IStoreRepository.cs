@@ -9,10 +9,10 @@ namespace QueueSafe.Models
 {
     public interface IStoreRepository
     {
-        Task<int> Create(StoreCreateDTO Store);
+        Task<(int affectedRows, int id)> Create(StoreCreateDTO Store);
         Task<StoreDetailsDTO> Read(int StoreId);
         IQueryable<StoreListDTO> ReadAllStores();
-        IQueryable<StoreListDTO> ReadStoresCity(int Postal);
+        IQueryable<StoreListDTO> ReadStoresCity(CityDTO City);
         Task<HttpStatusCode> Update(StoreUpdateDTO Store);
         Task<HttpStatusCode> Delete(int StoreId);
     }
