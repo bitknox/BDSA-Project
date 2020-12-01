@@ -67,7 +67,7 @@ namespace QueueSafe.Models
                              StoreId = h.StoreId,
                              StoreName = h.Store.Name,
                              TimeStamp = h.TimeStamp,
-                             State = (QueueSafe.Shared.BookingState)h.State
+                             State = h.State
                          };
             return await entity.FirstOrDefaultAsync();
         }
