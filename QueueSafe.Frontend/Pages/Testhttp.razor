@@ -1,0 +1,22 @@
+@page "/test"
+@using QueueSafe.Shared
+@inject HttpClient http
+
+
+<h1>Test</h1>
+@if(booking == null) {
+    <p>Loadink bookink</p>
+} else {
+    <p>Current count: @booking.StoreName</p>
+}
+
+
+
+@code {
+    private BookingDetailsDTO booking;
+    private int currentCount = 0;
+    protected override async Task OnInitializedAsync()
+    {
+        booking = await http.GetFromJsonAsync<BookingDetailsDTO>("Booking/toekn");
+    }
+}
