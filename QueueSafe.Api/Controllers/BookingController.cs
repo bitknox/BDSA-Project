@@ -23,10 +23,10 @@ namespace QueueSafe.Api.Controllers
             _repository = repository;
         }
 
-        [HttpPost]
+        [HttpPost("{StoreId}")]
         [ProducesResponseType(Status201Created)]
         [ProducesResponseType(Status400BadRequest)]
-        public async Task<IActionResult> Post([FromBody] int StoreId)
+        public async Task<IActionResult> Post(int StoreId)
         {            
             var result = await _repository.Create(StoreId);
 
@@ -64,7 +64,6 @@ namespace QueueSafe.Api.Controllers
 
                 return BadRequest(ModelState);
             }
-            
             var response = await _repository.Update(booking);
 
             return new StatusCodeResult((int)response);

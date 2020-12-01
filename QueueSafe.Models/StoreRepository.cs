@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System;
 using QueueSafe.Entities;
 using QueueSafe.Shared;
@@ -54,43 +55,56 @@ namespace QueueSafe.Models
 
         public async Task<StoreDetailsDTO> Read(int StoreId)
         {
-            var entity = from h in _context.Store
-                         where h.Id == StoreId
-                         select new StoreDetailsDTO
-                         {
-                             Name = h.Name,
-                             Capacity = h.Capacity,
-                             Address = h.Address.ToString()
-                         };
-
-            return await entity.FirstOrDefaultAsync();
+            return await _context.Store
+                    .Include(store => store.Address)
+                    .Include(store => store.Address.City)
+                    .Include(store => store.Bookings)
+                    .Where(store => store.Id == StoreId)
+                    .Select(store => new StoreDetailsDTO
+                    {
+                        Name = store.Name,
+                        Capacity = store.Capacity,
+                        Address = store.Address.ToString(),
+                        Image = store.Image,
+                        Bookings = store.Bookings.Select(booking => new BookingDetailsDTO
+                        {
+                            StoreId = booking.StoreId,
+                            StoreName = store.Name,
+                            TimeStamp = booking.TimeStamp,
+                            State = (QueueSafe.Shared.BookingState) booking.State
+                        }).ToList()
+                    }).FirstOrDefaultAsync();
         }
 
         public IQueryable<StoreListDTO> ReadAllStores()
         {
-            var stores = from h in _context.Store
-                         select new StoreListDTO
-                         {
-                             Id = h.Id,
-                             Name = h.Name,
-                             Capacity = h.Capacity
-                         };
-
-            return stores;
+            return _context.Store
+                     .Include(store => store.Address)
+                     .Include(store => store.Address.City)
+                     .Select(store => new StoreListDTO
+                     {
+                         Id = store.Id,
+                         Name = store.Name,
+                         Capacity = store.Capacity,
+                         Address = store.Address.ToString(),
+                         Image = store.Image
+                     });
         }
 
         public IQueryable<StoreListDTO> ReadStoresCity(CityDTO City)
         {
-            var stores = from h in _context.Store
-                         where h.Address.City.Postal == City.Postal
-                         select new StoreListDTO
-                         {
-                             Id = h.Id,
-                             Name = h.Name,
-                             Capacity = h.Capacity
-                         };
-
-            return stores;
+            return _context.Store
+                    .Include(store => store.Address)
+                    .Include(store => store.Address.City)
+                    .Where(store => store.Address.City.Postal == City.Postal)
+                    .Select(store => new StoreListDTO
+                    {
+                        Id = store.Id,
+                        Name = store.Name,
+                        Capacity = store.Capacity,
+                        Address = store.Address.ToString(),
+                        Image = store.Image
+                    });
         }
 
         public async Task<HttpStatusCode> Update(StoreUpdateDTO Store)
@@ -101,6 +115,8 @@ namespace QueueSafe.Models
 
             if (Store.Capacity > 0) entity.Capacity = Store.Capacity;
             else return BadRequest;
+
+            entity.Image = Store.Image;
 
             await _context.SaveChangesAsync();
 

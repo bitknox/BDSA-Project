@@ -10,6 +10,7 @@ namespace QueueSafe.Entities
         DbSet<Booking> Booking { get; }
         DbSet<Store> Store { get; set; }
         DbSet<City> City { get; set; }
+        DbSet<Address> Address { get; set; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }

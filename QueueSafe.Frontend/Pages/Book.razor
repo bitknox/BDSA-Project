@@ -7,7 +7,7 @@
 
 <h2>Current stress level</h2>
 
-<div @bind-style="Colour" @bind-style:event="onchange" width="200px" height="40px" >a</div>
+<div class="stress-box" @bind-style="Colour" @bind-style:event="onchange"> </div>
 
 <button class="btn btn-primary">Book this time</button>
 
@@ -23,7 +23,7 @@
     
     protected override void OnInitialized()
     {
-        calcColor(1);
+        calcColor(0.5);
 
         if (Int32.TryParse(Id, out int j))
         {

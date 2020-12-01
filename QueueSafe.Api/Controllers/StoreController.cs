@@ -36,16 +36,16 @@ namespace QueueSafe.Api.Controllers
         [HttpGet("{Id}")]
         [ProducesResponseType(Status200OK)]
         [ProducesResponseType(Status404NotFound)]
-        public async Task<ActionResult<StoreDetailsDTO>> Get(int StoreId)
+        public async Task<ActionResult<StoreDetailsDTO>> Get(int Id)
         {
-            var store = await _repository.Read(StoreId);
+            var store = await _repository.Read(Id);
 
             if (store == null) return NotFound();
 
             return store;
         }
 
-        [HttpGet("{Postal}")]
+        [HttpGet("all/{Postal}")]
         [ProducesResponseType(Status200OK)]
         [ProducesResponseType(Status404NotFound)]
         public ActionResult<IEnumerable<StoreListDTO>> Get(CityDTO City)

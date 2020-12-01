@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -14,5 +15,7 @@ namespace QueueSafe.Shared
         public string Address { get; set; }
 
         public string Image { get; set; }
+    
+        public List<BookingDetailsDTO> Bookings { get; set; }
     }
 }

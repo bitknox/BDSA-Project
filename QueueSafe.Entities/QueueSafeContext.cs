@@ -13,7 +13,7 @@ namespace QueueSafe.Entities
         public DbSet<Booking> Booking { get; set; }
         public DbSet<Store> Store { get; set; }
         public DbSet<City> City { get; set; }
-
+        public DbSet<Address> Address { get; set; }
 
         public QueueSafeContext(DbContextOptions<QueueSafeContext> options)
             : base(options)
