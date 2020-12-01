@@ -15,6 +15,8 @@ namespace QueueSafe.Entities
         [StringLength(50)]
         public string Name { get; set; } 
 
+        public string Image { get; set; }
+
         public virtual ICollection<Booking> Bookings { get; set; }
 
         public Address Address { get; set; }

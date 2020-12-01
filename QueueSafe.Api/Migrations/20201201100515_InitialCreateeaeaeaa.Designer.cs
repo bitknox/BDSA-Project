@@ -10,8 +10,8 @@ using QueueSafe.Entities;
 namespace QueueSafe.Api.Migrations
 {
     [DbContext(typeof(QueueSafeContext))]
-    [Migration("20201127123939_InitialCreateee")]
-    partial class InitialCreateee
+    [Migration("20201201100515_InitialCreateeaeaeaa")]
+    partial class InitialCreateeaeaeaa
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,19 +23,21 @@ namespace QueueSafe.Api.Migrations
 
             modelBuilder.Entity("QueueSafe.Entities.Address", b =>
                 {
-                    b.Property<int>("Postal")
-                        .HasColumnType("int");
-
                     b.Property<string>("StreetName")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("HouseNumber")
                         .HasColumnType("int");
 
+                    b.Property<int>("CityPostal")
+                        .HasColumnType("int");
+
                     b.Property<int>("StoreId")
                         .HasColumnType("int");
 
-                    b.HasKey("Postal", "StreetName", "HouseNumber");
+                    b.HasKey("StreetName", "HouseNumber", "CityPostal");
+
+                    b.HasIndex("CityPostal");
 
                     b.HasIndex("StoreId")
                         .IsUnique();
@@ -65,6 +67,19 @@ namespace QueueSafe.Api.Migrations
                     b.ToTable("Booking");
                 });
 
+            modelBuilder.Entity("QueueSafe.Entities.City", b =>
+                {
+                    b.Property<int>("Postal")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Postal");
+
+                    b.ToTable("City");
+                });
+
             modelBuilder.Entity("QueueSafe.Entities.Store", b =>
                 {
                     b.Property<int>("Id")
@@ -74,6 +89,9 @@ namespace QueueSafe.Api.Migrations
 
                     b.Property<int>("Capacity")
                         .HasColumnType("int");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -87,11 +105,19 @@ namespace QueueSafe.Api.Migrations
 
             modelBuilder.Entity("QueueSafe.Entities.Address", b =>
                 {
+                    b.HasOne("QueueSafe.Entities.City", "City")
+                        .WithMany("Addresses")
+                        .HasForeignKey("CityPostal")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("QueueSafe.Entities.Store", "Store")
                         .WithOne("Address")
                         .HasForeignKey("QueueSafe.Entities.Address", "StoreId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("City");
 
                     b.Navigation("Store");
                 });
@@ -105,6 +131,11 @@ namespace QueueSafe.Api.Migrations
                         .IsRequired();
 
                     b.Navigation("Store");
+                });
+
+            modelBuilder.Entity("QueueSafe.Entities.City", b =>
+                {
+                    b.Navigation("Addresses");
                 });
 
             modelBuilder.Entity("QueueSafe.Entities.Store", b =>

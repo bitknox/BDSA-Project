@@ -30,13 +30,13 @@ namespace QueueSafe.Models.Test
         }
         
         [Fact]
-        public async Task Create_store_successful_adds_three_entity_to_db()
+        public async Task Create_store_successful_adds_three_entity_to_db_from_new_store()
         {
             // Arrange
             var store = new StoreCreateDTO {
                 Name = "elminidik",
                 Capacity = 50,
-                Address = new AddressDTO { StreetName = "vejvej", City = new CityDTO { Postal = 2500 }, HouseNumber = 20 }
+                Address = new AddressDTO { StreetName = "vejvej", City = new CityDTO { Name = "CityNameee2", Postal = 9999 }, HouseNumber = 20 }
             };
 
             // Act
@@ -44,6 +44,24 @@ namespace QueueSafe.Models.Test
 
             // Assert
             Assert.Equal(3, result.affectedRows);
+        }
+
+        [Fact]
+        public async Task Create_store_successful_adds_two_entity_to_db_from_existing_store()
+        {
+            // Arrange
+            var store = new StoreCreateDTO {
+                Name = "gigidiks",
+                Capacity = 510,
+                Address = new AddressDTO { StreetName = "vejvej", City = new CityDTO { Name = "CityNameee1", Postal = 3300 }, HouseNumber = 220 },
+                Image = "123"
+            };
+
+            // Act
+            var result = await _repository.Create(store);
+
+            // Assert
+            Assert.Equal(2, result.affectedRows);
         }
 
         [Fact]

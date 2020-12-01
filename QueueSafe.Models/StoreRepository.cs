@@ -29,7 +29,8 @@ namespace QueueSafe.Models
                     StreetName = Store.Address.StreetName,
                     City = await GetCity(Store.Address.City),
                     HouseNumber = Store.Address.HouseNumber
-                }
+                },
+                Image = Store.Image
             };
 
             _context.Store.Add(entity);
@@ -108,10 +109,10 @@ namespace QueueSafe.Models
 
         private async Task<City> GetCity(CityDTO City)
         {
-            var entity = await _context.Store.FirstOrDefaultAsync(s => s.Address.City.Postal == City.Postal);
-
+            var entity = await _context.City.FirstOrDefaultAsync(c => c.Postal == City.Postal);
+            Console.WriteLine(entity);
             if (entity == null) return new City { Name = City.Name, Postal = City.Postal };
-            else return entity.Address.City;
+            else return entity;
         }
     }
 }

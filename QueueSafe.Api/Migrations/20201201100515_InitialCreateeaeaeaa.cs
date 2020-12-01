@@ -3,10 +3,22 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace QueueSafe.Api.Migrations
 {
-    public partial class InitialCreateee : Migration
+    public partial class InitialCreateeaeaeaa : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "City",
+                columns: table => new
+                {
+                    Postal = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_City", x => x.Postal);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Store",
                 columns: table => new
@@ -14,7 +26,8 @@ namespace QueueSafe.Api.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Capacity = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Image = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -26,13 +39,19 @@ namespace QueueSafe.Api.Migrations
                 columns: table => new
                 {
                     StreetName = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Postal = table.Column<int>(type: "int", nullable: false),
+                    CityPostal = table.Column<int>(type: "int", nullable: false),
                     HouseNumber = table.Column<int>(type: "int", nullable: false),
                     StoreId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Address", x => new { x.Postal, x.StreetName, x.HouseNumber });
+                    table.PrimaryKey("PK_Address", x => new { x.StreetName, x.HouseNumber, x.CityPostal });
+                    table.ForeignKey(
+                        name: "FK_Address_City_CityPostal",
+                        column: x => x.CityPostal,
+                        principalTable: "City",
+                        principalColumn: "Postal",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Address_Store_StoreId",
                         column: x => x.StoreId,
@@ -62,6 +81,11 @@ namespace QueueSafe.Api.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Address_CityPostal",
+                table: "Address",
+                column: "CityPostal");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Address_StoreId",
                 table: "Address",
                 column: "StoreId",
@@ -80,6 +104,9 @@ namespace QueueSafe.Api.Migrations
 
             migrationBuilder.DropTable(
                 name: "Booking");
+
+            migrationBuilder.DropTable(
+                name: "City");
 
             migrationBuilder.DropTable(
                 name: "Store");

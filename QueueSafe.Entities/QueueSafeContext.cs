@@ -12,6 +12,7 @@ namespace QueueSafe.Entities
     {
         public DbSet<Booking> Booking { get; set; }
         public DbSet<Store> Store { get; set; }
+        public DbSet<City> City { get; set; }
 
 
         public QueueSafeContext(DbContextOptions<QueueSafeContext> options)
@@ -35,21 +36,22 @@ namespace QueueSafe.Entities
             modelBuilder.Entity<Store>()
                     .HasOne(a => a.Address)
                     .WithOne(b => b.Store)
-                    .HasForeignKey<Address>(b => b.StoreId);            
-           
+                    .HasForeignKey<Address>(b => b.StoreId);
+
             modelBuilder.Entity<City>()
                     .HasKey(c => c.Postal);
+
+            modelBuilder.Entity<City>()
+                .Property(c => c.Postal)
+                .ValueGeneratedNever();
 
             modelBuilder.Entity<Address>()
                     .HasOne<City>(a => a.City)
                     .WithMany(b => b.Addresses)
                     .HasForeignKey(a => a.CityPostal);
-     
+
             modelBuilder.Entity<Address>()
                     .HasKey(s => new { s.StreetName, s.HouseNumber, s.CityPostal });
-
-
-
         }
     }
 }

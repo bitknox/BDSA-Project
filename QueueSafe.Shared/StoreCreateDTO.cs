@@ -11,6 +11,8 @@ namespace QueueSafe.Shared
 
         public int Capacity { get; set; }
 
+        public string Image { get; set; }
+
         [Required]
         public AddressDTO Address { get; set; }        
     }
