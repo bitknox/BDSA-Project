@@ -1,16 +1,19 @@
 @page "/book/{Id}"
+@using QueueSafe.Shared
+@inject HttpClient http
 
+@if (store != null)
+{
+    <h1>@store.Name</h1>
 
-<h1>ElMinidik</h1>
+    <h2>Next estimated time</h2>
 
-<h2>Next estimated time</h2>
+    <h2>Current stress level</h2>
 
-<h2>Current stress level</h2>
+    <div class="stress-box" @bind-style="Colour" @bind-style:event="onchange"> </div>
 
-<div class="stress-box" @bind-style="Colour" @bind-style:event="onchange"> </div>
-
-<button class="btn btn-primary">Book this time</button>
-
+    <button class="btn btn-primary">Book this time</button>
+}
 @code {
     [Parameter]
     public string Id { get; set; }
@@ -19,23 +22,19 @@
 
     protected string Colour { get; set; } = "background-color:red";
 
-    
-    
-    protected override void OnInitialized()
-    {
-        calcColor(0.5);
+    private StoreDetailsDTO store;
 
-        if (Int32.TryParse(Id, out int j))
-        {
-           storeId = j;
-        }
-        else
-        {
-            storeId = 0;
-        }
+
+    protected override async Task OnInitializedAsync()
+    {
+        store = await http.GetFromJsonAsync<StoreDetailsDTO>($"store/{Id}");
+        var size = store.Bookings.Select(booking => booking).Count();
+
+
+        Colour = $"background-color: {CalcStressColor((double)size / (double)store.Capacity)}";
     }
 
-    private void calcColor(double stress)
+    private string CalcStressColor(double stress)
     {
         int red;
         int green;
@@ -56,6 +55,6 @@
             blue = Convert.ToInt32((2 - stress / 0.5) * 82 + (-1 + stress / 0.5) * 70);
         }
 
-        Colour = $"background-color: rgb({red},{green},{blue})";
+        return $"rgb({red},{green},{blue})";
     }
 }
