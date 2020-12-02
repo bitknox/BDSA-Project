@@ -20,7 +20,7 @@
 
     public int storeId;
 
-    protected string Colour { get; set; } = "background-color:red";
+    protected string Colour { get; set; } = "background-color: rgb(255, 70, 70)";
 
     private StoreDetailsDTO store;
 
@@ -30,8 +30,11 @@
         store = await http.GetFromJsonAsync<StoreDetailsDTO>($"store/{Id}");
         var size = store.Bookings.Select(booking => booking).Count();
 
-
-        Colour = $"background-color: {CalcStressColor((double)size / (double)store.Capacity)}";
+        if (store.Capacity != 0)
+        {
+            var ratio = (double)size / (double)store.Capacity;
+            Colour = $"background-color: {CalcStressColor(ratio)}";
+        }
     }
 
     private string CalcStressColor(double stress)

@@ -1,9 +1,10 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace QueueSafe.Api.Migrations
 {
-    public partial class InitialCreateeaeaeaa : Migration
+    public partial class create : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -11,8 +12,8 @@ namespace QueueSafe.Api.Migrations
                 name: "City",
                 columns: table => new
                 {
-                    Postal = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Postal = table.Column<int>(type: "integer", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -23,11 +24,11 @@ namespace QueueSafe.Api.Migrations
                 name: "Store",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Capacity = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Image = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Capacity = table.Column<int>(type: "integer", nullable: false),
+                    Name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    Image = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -38,10 +39,10 @@ namespace QueueSafe.Api.Migrations
                 name: "Address",
                 columns: table => new
                 {
-                    StreetName = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    CityPostal = table.Column<int>(type: "int", nullable: false),
-                    HouseNumber = table.Column<int>(type: "int", nullable: false),
-                    StoreId = table.Column<int>(type: "int", nullable: false)
+                    StreetName = table.Column<string>(type: "text", nullable: false),
+                    CityPostal = table.Column<int>(type: "integer", nullable: false),
+                    HouseNumber = table.Column<int>(type: "integer", nullable: false),
+                    StoreId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -64,10 +65,10 @@ namespace QueueSafe.Api.Migrations
                 name: "Booking",
                 columns: table => new
                 {
-                    Token = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
-                    StoreId = table.Column<int>(type: "int", nullable: false),
-                    TimeStamp = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    State = table.Column<int>(type: "int", nullable: false)
+                    Token = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
+                    StoreId = table.Column<int>(type: "integer", nullable: false),
+                    TimeStamp = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    State = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
