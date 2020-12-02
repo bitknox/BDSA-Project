@@ -127,16 +127,14 @@ namespace QueueSafe.Api.Test
         {
             // Arrange
             int StoreId = 2;
-            mockBookingRepository.Setup(m => m.Create(StoreId)).ReturnsAsync((1, "sometoken"));
+            mockBookingRepository.Setup(m => m.Create(StoreId)).ReturnsAsync(new BookingListDTO{StoreId = StoreId, Token = "sometoken"});
             var controller = new BookingController(mockBookingRepository.Object);
             
             // Act
             var actual = await controller.Post(StoreId);
-
-             // Assert
-            var result = Assert.IsType<CreatedAtActionResult>(actual);
             
-            Assert.Equal(201, result.StatusCode);
+             // Assert            
+            Assert.Equal("sometoken", actual.Value.Token);
         }
     }
 }    

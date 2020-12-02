@@ -30,23 +30,23 @@ namespace QueueSafe.Models.Test
         }
 
         [Fact]
-        public async Task Create_booking_successful_adds_zero_entities_to_db_from_nonexisting_store()
+        public async Task Create_booking_returns_null_from_nonexisting_store()
         {   
             // Act
             var result = await _repository.Create(236666663);
 
             // Assert
-            Assert.Equal(0, result.affectedRows);
+            Assert.Null(result);
         }
 
         [Fact]
-        public async Task Create_booking_successful_adds_one_entitie_to_db_from_existing_store()
+        public async Task Create_booking_successful_from_existing_store()
         {
             // Act
             var result = await _repository.Create(2);
 
             // Assert
-            Assert.Equal(1, result.affectedRows);
+            Assert.Equal(2, result.StoreId);
         }
 
         [Fact]
@@ -73,6 +73,7 @@ namespace QueueSafe.Models.Test
             // Assert
             Assert.Equal(expected, actual);
         }
+
 
         [Fact]
         public async Task Read_non_existing_booking_returns_null()

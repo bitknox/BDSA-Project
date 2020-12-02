@@ -22,7 +22,7 @@ namespace QueueSafe.Models
             _context = context;
         }
 
-        public async Task<(int affectedRows, string token)> Create(int StoreId)
+        public async Task<BookingListDTO> Create(int StoreId)
         {
             try
             {
@@ -36,11 +36,16 @@ namespace QueueSafe.Models
 
                 _context.Booking.Add(entity);
                 var affectedRows = await _context.SaveChangesAsync();
-                return (affectedRows, entity.Token);
+                return new BookingListDTO
+                {
+                    StoreId = entity.StoreId,
+                    Token = entity.Token,
+                    TimeStamp = entity.TimeStamp
+                };
             }
             catch (ArgumentException)
             {
-                return (0, null);
+                return null;
             }
         }
 

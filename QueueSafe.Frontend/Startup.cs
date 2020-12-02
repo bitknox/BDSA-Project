@@ -1,16 +1,13 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using QueueSafe.Frontend.Data;
 using System.Net.Http;
-using System.Net.Http.Json;
+using Blazored.LocalStorage;
+using CurrieTechnologies.Razor.SweetAlert2;
 
 namespace QueueSafe.Frontend
 {
@@ -41,6 +38,8 @@ namespace QueueSafe.Frontend
                 client.BaseAddress = Api;
             });
             services.AddSingleton(_ => new HttpClient { BaseAddress = Api});
+            services.AddBlazoredLocalStorage();
+            services.AddSweetAlert2();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

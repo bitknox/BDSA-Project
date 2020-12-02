@@ -2,6 +2,7 @@ using System.Net.Http;
 using QueueSafe.Shared;
 using System.Threading.Tasks;
 using System;
+using System.Text.Json;
 
 namespace QueueSafe.Frontend
 {
@@ -12,6 +13,13 @@ namespace QueueSafe.Frontend
         public BookingRemote(HttpClient httpClient)
         {
              _httpClient = httpClient;
+        }
+
+        public async Task<BookingListDTO> CreateBooking(string StoreId)
+        {            
+            var result = await _httpClient.PostAsync($"booking/{StoreId}", new StringContent(""));
+            var response = JsonSerializer.Deserialize<BookingListDTO>(await result.Content.ReadAsStringAsync());
+            return response;
         }
 
         public async Task<BookingDetailsDTO> GetBooking(string token)

@@ -1,6 +1,10 @@
 @page "/book/{Id}"
 @using QueueSafe.Shared
 @inject IStoreRemote StoreRepo
+@inject IBookingRemote BookingRepo
+@inject Blazored.LocalStorage.ILocalStorageService LocalStorage
+@inject CurrieTechnologies.Razor.SweetAlert2.SweetAlertService Swal
+@using static CurrieTechnologies.Razor.SweetAlert2.SweetAlertIcon
 
 @if (store != null)
 {
@@ -12,7 +16,7 @@
 
     <div class="stress-box" @bind-style="Colour" @bind-style:event="onchange"> </div>
 
-    <button class="btn btn-primary">Book this time</button>
+    <button class="btn btn-primary" @onclick="CreateBooking">Book this time</button>
 }
 @code
 {
@@ -24,7 +28,6 @@
     protected string Colour { get; set; } = "background-color: rgb(255, 70, 70)";
 
     private StoreDetailsDTO store;
-
 
     protected override async Task OnInitializedAsync()
     {
@@ -60,5 +63,14 @@
         }
 
         return $"rgb({red},{green},{blue})";
+    }
+
+    private async void CreateBooking()
+    {
+        
+        BookingListDTO booking = await BookingRepo.CreateBooking(Id);
+        await LocalStorage.SetItemAsync("currentBooking", booking.Token); // Save in users local storage
+        await Swal.FireAsync("Booked!", "Booking created successfully", Success);
+    
     }
 }

@@ -7,6 +7,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using QueueSafe.Entities;
 using QueueSafe.Models;
+using Newtonsoft.Json.Serialization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace QueueSafe.Api
 {
@@ -29,12 +31,19 @@ namespace QueueSafe.Api
             services.AddScoped<IQueueSafeContext, QueueSafeContext>();
             services.AddScoped<IBookingRepository, BookingRepository>();
             services.AddScoped<IStoreRepository, StoreRepository>();
-    	    
+            services.AddMvc(setupAction =>
+            {
+                setupAction.EnableEndpointRouting = false;
+            }).AddJsonOptions(jsonOptions =>
+            {
+                jsonOptions.JsonSerializerOptions.PropertyNamingPolicy = null;
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_3_0); // Make Json Pascal case
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Booking API", Version = "v1" });
             });
-            
+
             services.AddControllers();
         }
 
@@ -54,7 +63,7 @@ namespace QueueSafe.Api
             {
                 endpoints.MapControllers();
             });
-            
+
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {

@@ -26,11 +26,11 @@ namespace QueueSafe.Api.Controllers
         [HttpPost("{StoreId}")]
         [ProducesResponseType(Status201Created)]
         [ProducesResponseType(Status400BadRequest)]
-        public async Task<IActionResult> Post(int StoreId)
-        {            
+        public async Task<ActionResult<BookingListDTO>> Post(int StoreId)
+        {
             var result = await _repository.Create(StoreId);
-
-            return CreatedAtAction(nameof(Get), new { result.token }, default);
+            if(result == null) return BadRequest();
+            return result;
         }
 
         [HttpGet("{token}")]
