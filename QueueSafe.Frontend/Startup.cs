@@ -28,10 +28,19 @@ namespace QueueSafe.Frontend
 
         public void ConfigureServices(IServiceCollection services)
         {
+            Uri Api = new Uri("http://localhost:5000");
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddSingleton<WeatherForecastService>();
-            services.AddSingleton(_ => new HttpClient { BaseAddress = new Uri("http://localhost:5000") });
+            services.AddHttpClient<IBookingRemote, BookingRemote> (client =>
+            {
+                client.BaseAddress = Api;
+            });
+            services.AddHttpClient<IStoreRemote, StoreRemote> (client =>
+            {
+                client.BaseAddress = Api;
+            });
+            services.AddSingleton(_ => new HttpClient { BaseAddress = Api});
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -58,3 +67,4 @@ namespace QueueSafe.Frontend
         }
     }
 }
+

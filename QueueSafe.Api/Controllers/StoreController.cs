@@ -27,7 +27,7 @@ namespace QueueSafe.Api.Controllers
         [ProducesResponseType(Status201Created)]
         [ProducesResponseType(Status400BadRequest)]
         public async Task<IActionResult> Post([FromBody] StoreCreateDTO store)
-        {            
+        {
             var result = await _repository.Create(store);
 
             return CreatedAtAction(nameof(Get), new { result.id }, default);
@@ -52,7 +52,7 @@ namespace QueueSafe.Api.Controllers
         {
             return _repository.ReadStoresCity(City).ToList();
         }
-    
+
         [HttpGet("all")]
         [ProducesResponseType(Status200OK)]
         public ActionResult<IEnumerable<StoreListDTO>> Get()
@@ -63,7 +63,7 @@ namespace QueueSafe.Api.Controllers
         [HttpPut("{Id}")]
         [ProducesResponseType(Status200OK)]
         [ProducesResponseType(Status404NotFound)]
-        public async Task<ActionResult> Put(int Id, [FromBody] StoreUpdateDTO Store)        
+        public async Task<ActionResult> Put(int Id, [FromBody] StoreUpdateDTO Store)
         {
             // Ensures you dont update wrong object
             if (Id != Store.Id)
@@ -72,7 +72,7 @@ namespace QueueSafe.Api.Controllers
 
                 return BadRequest(ModelState);
             }
-            
+
             var response = await _repository.Update(Store);
 
             return new StatusCodeResult((int)response);
@@ -85,7 +85,7 @@ namespace QueueSafe.Api.Controllers
         {
             var response = await _repository.Delete(Id);
 
-            return new StatusCodeResult((int) response);
+            return new StatusCodeResult((int)response);
         }
     }
 }

@@ -1,14 +1,20 @@
 @page "/stores"
 
 @using QueueSafe.Shared
-@inject HttpClient http
+@inject IJSRuntime JsRuntime;
+@inject IStoreRemote StoreRepo
 
-<h1>Select a store :)</h1>
+<div class="row">
+    <div class="col-sm-6 mb-3"><h1>Select a store</h1></div>
+    <div class="col-sm-6 mb-3">
+        <input @bind="searchInput" @bind:event="oninput" @onkeyup="Search" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+    </div>
+</div>
 
 @if (stores != null)
 {
     <div class="row">
-        @foreach (StoreListDTO store in stores)
+        @foreach (StoreListDTO store in searchedStores)
         {
             <div class="col-sm-6 mb-3">
                 <Store Id=@store.Id Name=@store.Name Address=@store.Address Image=@store.Image />
@@ -17,11 +23,22 @@
     </div>
 }
 
-@code {
+@code
+{
     private StoreListDTO[] stores;
+    private List<StoreListDTO> searchedStores;
+    private string searchInput { get; set; }
     private int currentCount = 0;
+    
     protected override async Task OnInitializedAsync()
     {
-        stores = await http.GetFromJsonAsync<StoreListDTO[]>("store/all");
+        stores = await StoreRepo.GetAllStores();
+        searchedStores = new List<StoreListDTO>(stores);
+    }
+
+    private async void Search()
+    {
+        if(searchInput == "") searchedStores = new List<StoreListDTO>(stores);
+        else searchedStores = stores.Where(store => store.Name.ToLower().Contains(searchInput.ToLower())).ToList();
     }
 }

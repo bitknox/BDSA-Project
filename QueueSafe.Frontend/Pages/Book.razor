@@ -1,6 +1,6 @@
 @page "/book/{Id}"
 @using QueueSafe.Shared
-@inject HttpClient http
+@inject IStoreRemote StoreRepo
 
 @if (store != null)
 {
@@ -14,7 +14,8 @@
 
     <button class="btn btn-primary">Book this time</button>
 }
-@code {
+@code
+{
     [Parameter]
     public string Id { get; set; }
 
@@ -27,7 +28,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        store = await http.GetFromJsonAsync<StoreDetailsDTO>($"store/{Id}");
+        store = await StoreRepo.GetStore(Id); 
         var size = store.Bookings.Select(booking => booking).Count();
 
         if (store.Capacity != 0)

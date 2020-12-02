@@ -23,7 +23,7 @@ namespace QueueSafe.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<QueueSafeContext>(options =>
-               options.UseNpgsql(Configuration.GetConnectionString("ConnectionString2"),
+               options.UseNpgsql(Configuration.GetConnectionString("ConnectionString"),
                b => b.MigrationsAssembly("QueueSafe.Api")));
             services.AddDbContext<QueueSafeContext>();
             services.AddScoped<IQueueSafeContext, QueueSafeContext>();
