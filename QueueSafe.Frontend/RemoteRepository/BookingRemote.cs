@@ -1,13 +1,15 @@
-nnamespace QueueSafe.Frontend
+namespace QueueSafe.Frontend
 {
     public class BookingRemote
     {
-        public BookingRemote(I)
+        private readonly HttpClient _httpClient;
+        public BookingRemote(HttpClient httpClient)
         {
-            
+             _httpClient = httpClient;
         }
 
         public void GetBooking(int Id)
         {}
     }
 }
+
