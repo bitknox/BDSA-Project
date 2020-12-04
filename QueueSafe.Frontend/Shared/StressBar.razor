@@ -1,0 +1,48 @@
+@using QueueSafe.Shared
+
+    <div class="stress-box" @bind-style="Colour" @bind-style:event="onchange"> </div>
+
+@code
+{
+    [Parameter]
+    public double ratio { get; set; }
+    protected string Colour { get; set; } = "background-color: rgb(255, 70, 70)";
+
+    protected override async Task OnInitializedAsync()
+    {
+        Colour = $"background-color: {CalcStressColor(ratio)}";
+    }
+
+    private string CalcStressColor(double stress)
+    {
+        int red;
+        int green;
+        int blue;
+        // 50, 168, 82
+        // 255, 255, 82
+        // 255, 70, 70
+        if (stress < 0.0)
+        {
+            stress = 0.0;
+        }
+        else if (stress > 1.0)
+        {
+            stress = 1.0;
+        }
+
+        if (stress <= 0.5)
+        {
+            red = Convert.ToInt32((1 - stress / 0.5) * 50 + (stress / 0.5) * 255);
+            green = Convert.ToInt32((1 - stress / 0.5) * 168 + (stress / 0.5) * 255);
+            blue = Convert.ToInt32((1 - stress / 0.5) * 82 + (stress / 0.5) * 82);
+        }
+        else
+        {
+            red = Convert.ToInt32((2 - stress / 0.5) * 255 + (-1 + stress / 0.5) * 255);
+            green = Convert.ToInt32((2 - stress / 0.5) * 255 + (-1 + stress / 0.5) * 70);
+            blue = Convert.ToInt32((2 - stress / 0.5) * 82 + (-1 + stress / 0.5) * 70);
+        }
+
+        return $"rgb({red},{green},{blue})";
+    }
+}

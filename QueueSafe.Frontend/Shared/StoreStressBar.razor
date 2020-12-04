@@ -1,0 +1,31 @@
+
+@using QueueSafe.Shared
+@inject IStoreRemote StoreRepo
+@inject IBookingRemote BookingRepo
+
+
+@if (store != null)
+{
+    <StressBar ratio=@ratio />
+
+    <p>@bookingAmount / @store.Capacity</p> 
+}
+
+@code
+{
+    [Parameter]
+    public StoreDetailsDTO store { get; set; }
+
+    private int bookingAmount;
+
+    private double ratio;
+    protected override async Task OnInitializedAsync()
+    {
+        bookingAmount = store.Bookings.Select(booking => booking).Where(booking => booking.State == BookingState.Active).Count();
+
+        if (store.Capacity != 0)
+        {
+            ratio = (double)bookingAmount / (double)store.Capacity;
+        }
+    }
+}

@@ -40,7 +40,7 @@
         searchedStores = new List<StoreListDTO>(stores);
     }
 
-    private async void Search()
+    private void Search()
     {
         if (searchInput.Trim() == "") searchedStores = new List<StoreListDTO>(stores);
         else searchedStores = stores.Where(store => store.ToString().ToLower().ContainsAll(searchInput.ToLower())).ToList();

@@ -8,31 +8,34 @@
 
 @if (store != null)
 {
-    <h1>@store.Name</h1>
-
-    <h2>Next estimated time</h2>
-
-    <h2>Current stress level</h2>
-
-    <div class="stress-box" @bind-style="Colour" @bind-style:event="onchange"> </div>
-
-    <p>@bookingAmount / @store.Capacity</p> 
-
-    <button class="btn btn-primary" @onclick="CreateBooking">Book this time</button>
+    <div class="row">
+        <div class="col-sm-12">
+            <h1 style="text-align: center;">@store.Name</h1>
+        </div>
+        <div class="col-sm-12">
+            <h2 style="text-align: center;">Next estimated available time</h2>
+        </div>
+        <div class="col-sm-12">
+            <h2 style="text-align: center;">Current stress level</h2>
+        </div>
+        <div class="col-sm-12" style="text-align: center;">
+            <StoreStressBar Store=@store />
+        </div>
+        <div class="col-sm-12" style="margin: auto;">
+            <button class="btn btn-primary" @onclick="CreateBooking">Book this time</button>
+        </div>
+    </div>  
 }
 @code
 {
     [Parameter]
     public string Id { get; set; }
 
-    public int storeId;
-
-    protected string Colour { get; set; } = "background-color: rgb(255, 70, 70)";
-
     private StoreDetailsDTO store;
 
     private int bookingAmount;
 
+    private double ratio;
     protected override async Task OnInitializedAsync()
     {
         store = await StoreRepo.GetStore(Id); 
@@ -40,41 +43,16 @@
 
         if (store.Capacity != 0)
         {
-            var ratio = (double)bookingAmount / (double)store.Capacity;
-            Colour = $"background-color: {CalcStressColor(ratio)}";
+            ratio = (double)bookingAmount / (double)store.Capacity;
+
         }
     }
 
-    private string CalcStressColor(double stress)
-    {
-        int red;
-        int green;
-        int blue;
-        // 50, 168, 82
-        // 255, 255, 82
-        // 255, 70, 70
-        if (stress <= 0.5)
-        {
-            red = Convert.ToInt32((1 - stress / 0.5) * 50 + (stress / 0.5) * 255);
-            green = Convert.ToInt32((1 - stress / 0.5) * 168 + (stress / 0.5) * 255);
-            blue = Convert.ToInt32((1 - stress / 0.5) * 82 + (stress / 0.5) * 82);
-        }
-        else
-        {
-            red = Convert.ToInt32((2 - stress / 0.5) * 255 + (-1 + stress / 0.5) * 255);
-            green = Convert.ToInt32((2 - stress / 0.5) * 255 + (-1 + stress / 0.5) * 70);
-            blue = Convert.ToInt32((2 - stress / 0.5) * 82 + (-1 + stress / 0.5) * 70);
-        }
-
-        return $"rgb({red},{green},{blue})";
-    }
 
     private async void CreateBooking()
-    {
-        
+    {        
         BookingListDTO booking = await BookingRepo.CreateBooking(Id);
         await LocalStorage.SetItemAsync("currentBooking", booking.Token); // Save in users local storage
-        await Swal.FireAsync("Booked!", "Booking created successfully", Success);
-    
+        await Swal.FireAsync("Booked!", "Booking created successfully", Success);    
     }
 }

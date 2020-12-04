@@ -7,22 +7,44 @@
 
 @if (Token != null)
 {
-    <h1>yo</h1> 
-    <SfQRCodeGenerator Width="200px" Height="150px" Value=@Token></SfQRCodeGenerator>
+    <div class="row">
+        <div class="col-sm-12">
+            <h1 style="text-align: center;">Reservation</h1>
+        </div>
+        <div class="col-sm-12">
+            <h1 style="text-align: center; font-size: 1.3em;">Estimated time</h1>
+        </div>
+        <div class="col-sm-12" style="text-align: center; margin: auto;">
+            @if (store != null)
+            { 
+                <StoreStressBar store=@store />
+            }
+        </div>
+        <div class="col-sm-12">
+            <div class="qrcode"> 
+            <SfQRCodeGenerator Width="300px" Height="300px" Value=@Token>
+                <QRCodeGeneratorDisplayText Visibility=false></QRCodeGeneratorDisplayText>
+            </SfQRCodeGenerator>
+            </div>
+        </div>
+    </div>
 }
 
 @code
 {
     private BookingDetailsDTO booking;
+
+    private StoreDetailsDTO store;
     private string Token;
-    
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
             Token = await LocalStorage.GetItemAsync<string>("currentBooking");
-            StateHasChanged();
             booking = await BookingRepo.GetBooking(Token);
+            store = await StoreRepo.GetStore(booking.StoreId.ToString());
+            StateHasChanged();
         }
     }
 }
