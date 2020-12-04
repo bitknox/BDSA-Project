@@ -16,6 +16,8 @@
 
     <div class="stress-box" @bind-style="Colour" @bind-style:event="onchange"> </div>
 
+    <p>@bookingAmount / @store.Capacity</p> 
+
     <button class="btn btn-primary" @onclick="CreateBooking">Book this time</button>
 }
 @code
@@ -29,14 +31,16 @@
 
     private StoreDetailsDTO store;
 
+    private int bookingAmount;
+
     protected override async Task OnInitializedAsync()
     {
         store = await StoreRepo.GetStore(Id); 
-        var size = store.Bookings.Select(booking => booking).Count();
+        bookingAmount = store.Bookings.Select(booking => booking).Count();
 
         if (store.Capacity != 0)
         {
-            var ratio = (double)size / (double)store.Capacity;
+            var ratio = (double)bookingAmount / (double)store.Capacity;
             Colour = $"background-color: {CalcStressColor(ratio)}";
         }
     }

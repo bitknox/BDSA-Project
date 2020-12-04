@@ -8,6 +8,7 @@ using QueueSafe.Frontend.Data;
 using System.Net.Http;
 using Blazored.LocalStorage;
 using CurrieTechnologies.Razor.SweetAlert2;
+using Syncfusion.Blazor;
 
 namespace QueueSafe.Frontend
 {
@@ -26,6 +27,7 @@ namespace QueueSafe.Frontend
         public void ConfigureServices(IServiceCollection services)
         {
             Uri Api = new Uri("http://localhost:5000");
+            services.AddSyncfusionBlazor();
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddSingleton<WeatherForecastService>();
@@ -45,6 +47,7 @@ namespace QueueSafe.Frontend
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(Configuration["License:qrlicense"]);
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

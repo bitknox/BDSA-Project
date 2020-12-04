@@ -1,13 +1,17 @@
 @page "/stores"
 
 @using QueueSafe.Shared
+@using QueueSafe.Frontend.Extensions
 @inject IJSRuntime JsRuntime;
 @inject IStoreRemote StoreRepo
 
 <div class="row">
-    <div class="col-sm-6 mb-3"><h1>Select a store</h1></div>
+    <div class="col-sm-6 mb-3">
+        <h1>Select a store</h1>
+    </div>
     <div class="col-sm-6 mb-3 margin-top">
-        <input @bind="searchInput" @bind:event="oninput" @onkeyup="Search" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+        <input @bind="searchInput" @bind:event="oninput" @onkeyup="Search" class="form-control mr-sm-2" type="search"
+            placeholder="Search" aria-label="Search">
     </div>
 </div>
 
@@ -29,7 +33,7 @@
     private List<StoreListDTO> searchedStores;
     private string searchInput { get; set; }
     private int currentCount = 0;
-    
+
     protected override async Task OnInitializedAsync()
     {
         stores = await StoreRepo.GetAllStores();
@@ -38,20 +42,7 @@
 
     private async void Search()
     {
-        if(searchInput.Trim() == "") searchedStores = new List<StoreListDTO>(stores);
-        else searchedStores = stores.Where(store => store.Name.ToLower().Contains(searchInput.ToLower())).ToList();
+        if (searchInput.Trim() == "") searchedStores = new List<StoreListDTO>(stores);
+        else searchedStores = stores.Where(store => store.ToString().ToLower().ContainsAll(searchInput.ToLower())).ToList();
     }
-    
-    /*private bool ContainsAll(this string s, string b)
-    {
-        bool ContainsAll = true;
-
-        foreach(var word in b.Trim().Split(" "))
-        {
-            if(!s.Contains(word)) ContainsAll = false;
-        }
-
-        return ContainsAll;
-    } */
-    
 }

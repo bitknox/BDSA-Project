@@ -11,5 +11,7 @@ namespace QueueSafe.Shared
         public string Address { get; set; }
 
         public string Image { get; set; }
+
+        public override string ToString() => $"{Name} {Address}";
     }
 }

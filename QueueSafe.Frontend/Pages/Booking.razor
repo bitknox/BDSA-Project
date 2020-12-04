@@ -1,0 +1,28 @@
+@page "/my"
+@using QueueSafe.Shared
+@inject IStoreRemote StoreRepo
+@inject IBookingRemote BookingRepo
+@inject Blazored.LocalStorage.ILocalStorageService LocalStorage
+@using Syncfusion.Blazor.BarcodeGenerator
+
+@if (Token != null)
+{
+    <h1>yo</h1> 
+    <SfQRCodeGenerator Width="200px" Height="150px" Value=@Token></SfQRCodeGenerator>
+}
+
+@code
+{
+    private BookingDetailsDTO booking;
+    private string Token;
+    
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            Token = await LocalStorage.GetItemAsync<string>("currentBooking");
+            StateHasChanged();
+            booking = await BookingRepo.GetBooking(Token);
+        }
+    }
+}
