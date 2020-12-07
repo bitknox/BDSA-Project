@@ -4,6 +4,8 @@ using QueueSafe.Shared;
 using System.Threading.Tasks;
 using System;
 using System.Text.Json;
+using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace QueueSafe.Frontend
 {
@@ -23,9 +25,23 @@ namespace QueueSafe.Frontend
             return response;
         }
 
+        public async Task<bool> DeleteBooking(string token)
+        {
+            var result = await _httpClient.DeleteAsync($"booking/{token}");
+            var StatusCode = result.StatusCode;
+            return StatusCode != HttpStatusCode.OK ? false : true;
+        }
+
         public async Task<BookingDetailsDTO> GetBooking(string token)
         {
             return await _httpClient.GetFromJsonAsync<BookingDetailsDTO>($"booking/{token}");
+        }
+
+        public async Task<bool> UpdateBooking(string token, BookingUpdateDTO booking)
+        {
+            var result = await _httpClient.PutAsJsonAsync($"booking/{token}", booking);
+            var StatusCode = result.StatusCode;
+            return StatusCode != HttpStatusCode.OK ? false : true;
         }
     }
 }

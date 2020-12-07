@@ -66,10 +66,10 @@ namespace QueueSafe.Models
                         Capacity = store.Capacity,
                         Address = store.Address.ToString(),
                         Image = store.Image,
-                        Bookings = store.Bookings.Select(booking => new BookingDetailsDTO
+                        Bookings = store.Bookings.Select(booking => new BookingListDTO
                         {
+                            Token = booking.Token,
                             StoreId = booking.StoreId,
-                            StoreName = store.Name,
                             TimeStamp = booking.TimeStamp,
                             State = (QueueSafe.Shared.BookingState) booking.State
                         }).ToList()

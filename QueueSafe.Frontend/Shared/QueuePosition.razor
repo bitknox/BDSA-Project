@@ -1,0 +1,30 @@
+@inject Blazored.LocalStorage.ILocalStorageService LocalStorage
+@using QueueSafe.Shared
+@using QueueSafe.Frontend.Extensions
+
+@if (store.IsFull())
+{
+    
+    @if (QueuePos != -1)
+    {
+        <p>Your position in the queue: <span>@QueuePos</span></p>
+    }
+}
+@if(QueuePos == -1)
+{
+    <p style="color: blue;">Scanned</p>
+}
+
+@code {
+    [Parameter]
+    public StoreDetailsDTO store { get; set; }
+    public int QueuePos;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var localToken = await LocalStorage.GetItemAsync<string>("currentBooking");
+        var queue = store.Bookings.Where(booking => booking.State == BookingState.Pending).OrderBy(booking =>
+            booking.TimeStamp).ToList();
+        QueuePos = queue.FindIndex(booking => booking.Token == localToken);
+    }
+}

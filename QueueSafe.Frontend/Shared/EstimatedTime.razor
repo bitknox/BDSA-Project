@@ -1,0 +1,28 @@
+@using QueueSafe.Shared
+@using QueueSafe.Frontend.Extensions
+
+
+@if (store != null && store.IsFull())
+{
+    <div class="col-sm-12">
+        <h4 style="text-align: center;">Next estimated available time</h4>
+    </div>
+    <div class="col-sm-12">
+        <h2 style="text-align: center; color: red">Not now</h2>
+    </div>
+}
+else
+{
+    <div class="col-sm-12">
+        <h4 style="text-align: center;">Estimated time</h4>
+    </div>
+    <div class="col-sm-12">
+        <h2 style="text-align: center; color: green">Now</h2>
+    </div>
+}
+
+
+@code {
+    [Parameter]
+    public StoreDetailsDTO store { get; set; }
+}

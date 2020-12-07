@@ -9,5 +9,7 @@ namespace QueueSafe.Shared
         public DateTime TimeStamp { get; set; }
         
         public string Token { get; set; } 
+
+        public BookingState State { get; set; }
     }
 }

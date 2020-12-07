@@ -2,28 +2,29 @@
 @using QueueSafe.Shared
 @inject IStoreRemote StoreRepo
 @inject IBookingRemote BookingRepo
+@inject NavigationManager NavigationManager
 @inject Blazored.LocalStorage.ILocalStorageService LocalStorage
 @inject CurrieTechnologies.Razor.SweetAlert2.SweetAlertService Swal
 @using static CurrieTechnologies.Razor.SweetAlert2.SweetAlertIcon
 
 @if (store != null)
 {
-    <div class="row">
-        <div class="col-sm-12">
-            <h1 style="text-align: center;">@store.Name</h1>
-        </div>
-        <div class="col-sm-12">
-            <h2 style="text-align: center;">Next estimated available time</h2>
-        </div>
-        <div class="col-sm-12">
-            <h2 style="text-align: center;">Current stress level</h2>
-        </div>
-        <div class="col-sm-12" style="text-align: center;">
-            <StoreStressBar Store=@store />
-        </div>
-        <div class="col-sm-12" style="margin: auto;">
-            <button class="btn btn-primary" @onclick="CreateBooking">Book this time</button>
-        </div>
+    <div class="content-container">
+        <div class="row">
+            <div class="col-sm-12">
+                <h1 style="text-align: center;">@store.Name</h1>
+            </div>
+            <EstimatedTime store=@store />
+            <div class="col-sm-12">
+                <h3 style="text-align: center;">Current stress level</h3>
+            </div>            
+            <div class="col-sm-12" style="text-align: center;">
+                <StoreStressBar Store=@store />
+            </div>
+            <div class="col-sm-12" style="text-align: center;">
+                <button class="btn btn-primary" @onclick="CreateBooking">Book this time</button>
+            </div>
+        </div>  
     </div>  
 }
 @code
@@ -35,7 +36,10 @@
 
     private int bookingAmount;
 
+    private int activeBookingAmount;
+
     private double ratio;
+
     protected override async Task OnInitializedAsync()
     {
         store = await StoreRepo.GetStore(Id); 
@@ -50,9 +54,18 @@
 
 
     private async void CreateBooking()
-    {        
+    {   
+        var localToken = await LocalStorage.GetItemAsync<string>("currentBooking");
+        if (localToken != null)
+        {
+            var result = await BookingRepo.DeleteBooking(localToken.ToString());
+            Console.WriteLine($"booo {result}");
+            if (result) Console.WriteLine("Deleted");
+        } 
+
         BookingListDTO booking = await BookingRepo.CreateBooking(Id);
         await LocalStorage.SetItemAsync("currentBooking", booking.Token); // Save in users local storage
-        await Swal.FireAsync("Booked!", "Booking created successfully", Success);    
+        await Swal.FireAsync("Booked!", "Booking created successfully", Success);  
+        NavigationManager.NavigateTo("my");
     }
 }

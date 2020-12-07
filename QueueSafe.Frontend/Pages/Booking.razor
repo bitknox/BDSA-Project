@@ -3,28 +3,37 @@
 @inject IStoreRemote StoreRepo
 @inject IBookingRemote BookingRepo
 @inject Blazored.LocalStorage.ILocalStorageService LocalStorage
+@inject CurrieTechnologies.Razor.SweetAlert2.SweetAlertService Swal
+@using static CurrieTechnologies.Razor.SweetAlert2.SweetAlertIcon
 @using Syncfusion.Blazor.BarcodeGenerator
 
 @if (Token != null)
 {
-    <div class="row">
-        <div class="col-sm-12">
-            <h1 style="text-align: center;">Reservation</h1>
-        </div>
-        <div class="col-sm-12">
-            <h1 style="text-align: center; font-size: 1.3em;">Estimated time</h1>
-        </div>
-        <div class="col-sm-12" style="text-align: center; margin: auto;">
-            @if (store != null)
-            { 
-                <StoreStressBar store=@store />
-            }
-        </div>
-        <div class="col-sm-12">
-            <div class="qrcode"> 
-            <SfQRCodeGenerator Width="300px" Height="300px" Value=@Token>
-                <QRCodeGeneratorDisplayText Visibility=false></QRCodeGeneratorDisplayText>
-            </SfQRCodeGenerator>
+    <div class="content-container">
+        <div class="row">
+            <div class="col-sm-12">
+                <h1 style="text-align: center; margin-top: 5px;">Reservation</h1>
+                <h3 style="text-align: center;">@store.Name</h3>
+            </div>
+            <div class="col-sm-12">
+                <h4 style="text-align: center; margin-top: 5px;"><QueuePosition store=@store /></h4>
+            </div>
+            <EstimatedTime store=@store/>            
+            <div class="col-sm-12" style="text-align: center; margin: auto;">
+                @if (store != null)
+                { 
+                    <StoreStressBar store=@store/>
+                }
+            </div>
+            <div class="col-sm-12">
+                <div class="qrcode"> 
+                <SfQRCodeGenerator Width="300px" Height="300px" Value=@Token>
+                    <QRCodeGeneratorDisplayText Visibility=false></QRCodeGeneratorDisplayText>
+                </SfQRCodeGenerator>
+                </div>
+            </div>
+            <div class="col-sm-12" style="text-align: center;">
+                <button disabled=@store.IsFull() class="btn btn-primary" @onclick="ScanBooking">Scan</button>
             </div>
         </div>
     </div>
@@ -35,6 +44,7 @@
     private BookingDetailsDTO booking;
 
     private StoreDetailsDTO store;
+    
     private string Token;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -45,6 +55,25 @@
             booking = await BookingRepo.GetBooking(Token);
             store = await StoreRepo.GetStore(booking.StoreId.ToString());
             StateHasChanged();
+        }
+    }
+
+    private async void ScanBooking()
+    {
+        var update = new BookingUpdateDTO
+        {
+            State = BookingState.Active,
+            Token = Token
+        };
+
+        var result = await BookingRepo.UpdateBooking(Token, update);
+        if (result)
+        {
+            await Swal.FireAsync("Scanned!", "You can enter the store!", Success);
+        }
+        else
+        {
+            await Swal.FireAsync("Error!", "There was a problem!", Error);
         }
     }
 }

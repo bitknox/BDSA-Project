@@ -5,27 +5,29 @@
 @inject IJSRuntime JsRuntime;
 @inject IStoreRemote StoreRepo
 
-<div class="row">
-    <div class="col-sm-6 mb-3">
-        <h1>Select a store</h1>
-    </div>
-    <div class="col-sm-6 mb-3 margin-top">
-        <input @bind="searchInput" @bind:event="oninput" @onkeyup="Search" class="form-control mr-sm-2" type="search"
-            placeholder="Search" aria-label="Search">
-    </div>
-</div>
-
-@if (stores != null)
-{
+<div class="content-container">
     <div class="row">
-        @foreach (StoreListDTO store in searchedStores)
-        {
-            <div class="col-sm-6 mb-3">
-                <Store Id=@store.Id Name=@store.Name Address=@store.Address Image=@store.Image />
-            </div>
-        }
+        <div class="col-sm-6 mb-3">
+            <h1>Select a store</h1>
+        </div>
+        <div class="col-sm-6 mb-3 margin-top">
+            <input @bind="searchInput" @bind:event="oninput" @onkeyup="Search" class="form-control mr-sm-2" type="search"
+                placeholder="Search" aria-label="Search">
+        </div>
     </div>
-}
+
+    @if (stores != null)
+    {
+        <div class="row">
+            @foreach (StoreListDTO store in searchedStores)
+            {
+                <div class="col-sm-6 mb-3">
+                    <Store Id=@store.Id Name=@store.Name Address=@store.Address Image=@store.Image />
+                </div>
+            }
+        </div>
+    }
+</div>
 
 @code
 {

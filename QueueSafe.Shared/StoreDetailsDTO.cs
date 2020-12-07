@@ -16,6 +16,6 @@ namespace QueueSafe.Shared
 
         public string Image { get; set; }
     
-        public List<BookingDetailsDTO> Bookings { get; set; }
+        public List<BookingListDTO> Bookings { get; set; }
     }
 }
