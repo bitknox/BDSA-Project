@@ -3,6 +3,7 @@
 @inject IStoreRemote StoreRepo
 @inject IBookingRemote BookingRepo
 @inject Blazored.LocalStorage.ILocalStorageService LocalStorage
+@inject NavigationManager NavigationManager
 @inject CurrieTechnologies.Razor.SweetAlert2.SweetAlertService Swal
 @using static CurrieTechnologies.Razor.SweetAlert2.SweetAlertIcon
 @using Syncfusion.Blazor.BarcodeGenerator
@@ -70,6 +71,7 @@
         if (result)
         {
             await Swal.FireAsync("Scanned!", "You can enter the store!", Success);
+            NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
         }
         else
         {

@@ -137,10 +137,22 @@ app {
     top: 0.5rem;
 }
 
+.content-container {
+    margin-top: 3.5rem;
+}
+
 @media (max-width: 767.98px) {
     .main .top-row:not(.auth) {
         display: none;
     }
+
+    /* .content {
+        margin-top: 60px;
+    } */
+
+    /* .inner {
+        margin-top: 90px;
+    } */
 
     .main .top-row.auth {
         justify-content: space-between;
@@ -167,7 +179,6 @@ app {
         max-width: 1000px;
         margin-left: auto;
         margin-right: auto;
-        margin-top: 3.5rem;
         width: 100%;
         padding: 2rem;
     }
@@ -271,6 +282,8 @@ body {
   display: table;
   width: 100%;
   /*height: 600px;*/
+  background-position: center;
+  background-image: url("../vector-queue.jpg");
   background-color: #333;
   height: 100vh; 
   min-height: 100%;
@@ -340,9 +353,13 @@ body {
  * Cover
  */
 
-.cover {
-  padding: 0 20px;
-}
+ .black-opaque {
+    background: rgb(100, 100, 100, 0.3);
+    width: 100%;
+    height: 100%;
+    padding: 20px 20px;
+ }
+
 .cover .btn-lg {
   padding: 10px 20px;
   font-weight: bold;
@@ -359,8 +376,8 @@ body {
     top: 0;
   }
   /* Start the vertical centering */
-  .site-wrapper-inner {
+  /* .site-wrapper-inner {
     vertical-align: middle;
-  }
+  } */
 
 }
