@@ -1,15 +1,25 @@
 @using QueueSafe.Shared
 @using QueueSafe.Frontend.Extensions
+@inject Blazored.LocalStorage.ILocalStorageService LocalStorage
 
 
 @if (store != null && store.IsFull())
 {
     <div class="col-sm-12">
         <h4 style="text-align: center;">Next estimated available time</h4>
-    </div>
+    </div>    
     <div class="col-sm-12">
+    @if (state == BookingState.Active)
+    {
+        <h2 style="text-align: center; color: green">Now</h2>
+    }
+    else 
+    {
         <h2 style="text-align: center; color: red">Not now</h2>
+    }
     </div>
+    
+    
 }
 else
 {
@@ -25,4 +35,21 @@ else
 @code {
     [Parameter]
     public StoreDetailsDTO store { get; set; }
+
+    private BookingState state = BookingState.Pending;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var localToken = await LocalStorage.GetItemAsync<string>("currentBooking");
+            var booking = store.Bookings.Select(booking => booking).Where(booking => booking.Token == localToken).FirstOrDefault();
+            
+            if (booking != null)
+            {
+                state = booking.State;
+                StateHasChanged();
+            }
+        }
+    }
 }
